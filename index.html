@@ -28,6 +28,20 @@
             pointer-events: none;
             z-index: 0;
         }
+
+        /* ANIMAÇÃO DO SLIDER INFINITO DE FOTOS */
+        @keyframes slideInfinito {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-slider {
+            display: flex;
+            width: max-content;
+            animation: slideInfinito 35s linear infinite;
+        }
+        .animate-slider:hover {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 <body class="bg-stone-900 text-stone-100 min-h-screen flex flex-col justify-between relative">
@@ -39,7 +53,6 @@
     <header class="bg-stone-950 border-b border-stone-800 sticky top-0 z-50 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-5">
-                <!-- Logo com tamanho aumentado em 50% (h-36 md:h-42) -->
                 <img src="https://i.imgur.com/wx6l3ac.png" alt="Logo" class="h-36 md:h-42 w-auto object-contain rounded-xl border-2 border-amber-500/50 shadow-2xl bg-stone-900 p-2 transition hover:scale-105">
                 <div>
                     <h1 class="font-serif text-3xl md:text-4xl font-bold tracking-wide text-amber-400 drop-shadow">HOTEL DOS SONHOS FAZENDA</h1>
@@ -271,6 +284,31 @@
         </section>
 
     </main>
+
+    <!-- CARROSSEL DE FOTOS DESLIZANTE NA PARTE INFERIOR -->
+    <div class="w-full bg-stone-950 border-t border-stone-800 py-4 overflow-hidden relative z-10 mt-12">
+        <div class="text-center mb-3">
+            <span class="text-xs text-amber-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-camera mr-1"></i> Conheça Nosso Espaço</span>
+        </div>
+        <div class="overflow-hidden whitespace-nowrap relative w-full">
+            <div class="animate-slider flex gap-4">
+                <!-- 1º BLOCO DE FOTOS -->
+                <div class="flex gap-4 shrink-0">
+                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                </div>
+                <!-- 2º BLOCO DUPLICADO (PARA GARANTIR O LOOP INFINITO SUAVE) -->
+                <div class="flex gap-4 shrink-0">
+                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL SÓCIO -->
     <div id="modal-reserva" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
