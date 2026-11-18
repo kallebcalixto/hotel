@@ -37,7 +37,7 @@
         .animate-slider {
             display: flex;
             width: max-content;
-            animation: slideInfinito 35s linear infinite;
+            animation: slideInfinito 40s linear infinite;
         }
         .animate-slider:hover {
             animation-play-state: paused;
@@ -285,26 +285,38 @@
 
     </main>
 
-    <!-- CARROSSEL DE FOTOS DESLIZANTE NA PARTE INFERIOR -->
-    <div class="w-full bg-stone-950 border-t border-stone-800 py-4 overflow-hidden relative z-10 mt-12">
-        <div class="text-center mb-3">
-            <span class="text-xs text-amber-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-camera mr-1"></i> Conheça Nosso Espaço</span>
+    <!-- CARROSSEL DE FOTOS COM EFEITO DE ZOOM E DESTAQUE AO PASSAR O MOUSE -->
+    <div class="w-full bg-stone-950 border-t border-stone-800 py-6 overflow-hidden relative z-10 mt-12 shadow-2xl">
+        <div class="text-center mb-4">
+            <span class="text-xs text-amber-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-camera mr-1"></i> Conheça Nosso Espaço (Passe o mouse para destacar)</span>
         </div>
         <div class="overflow-hidden whitespace-nowrap relative w-full">
-            <div class="animate-slider flex gap-4">
-                <!-- 1º BLOCO DE FOTOS -->
-                <div class="flex gap-4 shrink-0">
-                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
-                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
-                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
-                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+            <div class="animate-slider flex gap-5 px-4">
+                <!-- BLOCO 1 DE FOTOS -->
+                <div class="flex gap-5 shrink-0 items-center">
+                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/a2c5b278-9852-4e90-b869-6287a94d690d" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/006ba1d8-7a22-4a62-a0bd-e2611f61c5dc" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
+                    <img src="https://i.imgur.com/67785f7f-37cf-4520-9bd1-c26e9be79fd2" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/kBz0ek6.jpeg'">
+                    <img src="https://i.imgur.com/0fb4bafe-208c-403f-b1ef-be3cf207a738" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/MJIsJMe.jpeg'">
+                    <img src="https://i.imgur.com/3c56436e-6694-4787-bfde-9908c62b8e78" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/089fa65f-7c2d-43fd-ab14-847339c49879" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
                 </div>
-                <!-- 2º BLOCO DUPLICADO (PARA GARANTIR O LOOP INFINITO SUAVE) -->
-                <div class="flex gap-4 shrink-0">
-                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
-                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
-                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
-                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-32 w-52 object-cover rounded-xl border border-stone-800 shadow-md">
+                <!-- BLOCO 2 DUPLICADO (PARA GARANTIR O LOOP INFINITO SUAVE) -->
+                <div class="flex gap-5 shrink-0 items-center">
+                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
+                    <img src="https://i.imgur.com/a2c5b278-9852-4e90-b869-6287a94d690d" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/006ba1d8-7a22-4a62-a0bd-e2611f61c5dc" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
+                    <img src="https://i.imgur.com/67785f7f-37cf-4520-9bd1-c26e9be79fd2" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/kBz0ek6.jpeg'">
+                    <img src="https://i.imgur.com/0fb4bafe-208c-403f-b1ef-be3cf207a738" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/MJIsJMe.jpeg'">
+                    <img src="https://i.imgur.com/3c56436e-6694-4787-bfde-9908c62b8e78" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/089fa65f-7c2d-43fd-ab14-847339c49879" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
                 </div>
             </div>
         </div>
