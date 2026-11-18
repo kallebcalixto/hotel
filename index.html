@@ -16,15 +16,15 @@
             border: 2px dashed rgba(217, 119, 6, 0.6);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(217, 119, 6, 0.25);
         }
-        /* LOGO DE FUNDO BEM GRANDE NA TELA TODA */
+        /* LOGO DE FUNDO COBRINDO A TELA TODA (COVER) */
         .bg-watermark {
             position: fixed;
             inset: 0;
             background-image: url('https://i.imgur.com/wx6l3ac.png');
             background-repeat: no-repeat;
             background-position: center;
-            background-size: min(120vw, 1300px) auto;
-            opacity: 0.10;
+            background-size: cover;
+            opacity: 0.12;
             pointer-events: none;
             z-index: 0;
         }
@@ -32,7 +32,7 @@
 </head>
 <body class="bg-stone-900 text-stone-100 min-h-screen flex flex-col justify-between relative">
 
-    <!-- FUNDO COM MARCA D'ÁGUA DA LOGO BEM GRANDE -->
+    <!-- FUNDO COM MARCA D'ÁGUA DA LOGO NA TELA TODA -->
     <div class="bg-watermark"></div>
 
     <!-- HEADER COM LOGO BEM MAIOR E MAIS APARENTE (BOTÃO ADMIN REMOVIDO) -->
