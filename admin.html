@@ -56,7 +56,7 @@
             <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Taxa de Ocupação</span><span id="adm-taxa-ocupacao" class="text-3xl font-extrabold text-emerald-400 mt-1 block">0%</span></div>
         </div>
 
-        <!-- NOVO: SEÇÃO DE CONFIGURAÇÃO DE WHATSAPP (AVULSO E SÓCIOS) -->
+        <!-- SEÇÃO DE CONFIGURAÇÃO DE WHATSAPP (AVULSO E SÓCIOS) -->
         <div class="bg-stone-900 border border-emerald-600/30 p-6 rounded-2xl shadow-xl space-y-4">
             <div>
                 <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded border border-emerald-500/20 uppercase">Configuração de Atendimento</span>
@@ -280,7 +280,6 @@
         };
 
         function iniciarEscutaTempoReal() {
-            // Carregar WhatsApps salvos
             onValue(ref(db, 'configuracoes/whatsapps'), (snapshot) => {
                 if(snapshot.exists()) {
                     const w = snapshot.val();
@@ -373,7 +372,6 @@
             }
         }
 
-        // SALVAR WHATSAPPS COM SENHA SAADMIN
         window.salvarWhatsappsAdmin = async function() {
             const senhaDigitada = prompt("Insira a senha administrativa para alterar os números de WhatsApp (Saadmin):");
             if(senhaDigitada !== 'Saadmin') { alert("Senha incorreta!"); return; }
@@ -518,9 +516,18 @@
             }
         };
 
+        // EXIGE SENHA SAADMIN PARA DAR BAIXA NA PARCELA
         window.adicionarParcela = async function(cpfKey, atual) {
+            const senhaDigitada = prompt("🔒 Validação Gerencial\n\nDigite a senha administrativa (Saadmin) para confirmar a baixa da parcela:");
+            if(senhaDigitada !== 'Saadmin') { alert("❌ Senha incorreta! Baixa de pagamento cancelada."); return; }
+
             if(atual < 12) {
-                await update(ref(db, `socios/${cpfKey}`), { parcelasPagas: atual + 1 });
+                try {
+                    await update(ref(db, `socios/${cpfKey}`), { parcelasPagas: atual + 1 });
+                    alert("Parcela baixada com sucesso!");
+                } catch(err) { alert("Erro ao dar baixa: " + err.message); }
+            } else {
+                alert("Este sócio já concluiu todas as 12 parcelas do contrato!");
             }
         };
 
