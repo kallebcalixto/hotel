@@ -306,14 +306,22 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        const WHATSAPP_HOTEL = "5541996278447";
+        let WHATSAPP_AVULSO = "5541996278447";
+        let WHATSAPP_SOCIO = "5541996278447";
         let cachePlanos = { padrao: { valor: 199.90, limiteDias: 5 }, vip: { valor: 299.90, limiteDias: 10 } };
 
         window.addEventListener('DOMContentLoaded', async () => {
-            onValue(ref(db, 'configuracoes/planos'), (snapshot) => {
+            // Sincronizar WhatsApps do Firebase
+            onValue(ref(db, 'configuracoes/whatsapps'), (snapshot) => {
                 if(snapshot.exists()) {
-                    cachePlanos = snapshot.val();
+                    const w = snapshot.val();
+                    if(w.avulso) WHATSAPP_AVULSO = w.avulso;
+                    if(w.socio) WHATSAPP_SOCIO = w.socio;
                 }
+            });
+
+            onValue(ref(db, 'configuracoes/planos'), (snapshot) => {
+                if(snapshot.exists()) { cachePlanos = snapshot.val(); }
                 atualizarAvisoPlano();
             });
 
@@ -334,7 +342,6 @@
         window.atualizarAvisoPlano = function() {
             const planoEscolhido = document.getElementById('cad-plano').value;
             const pInfo = cachePlanos[planoEscolhido] || (planoEscolhido === 'vip' ? { valor: 299.90, limiteDias: 10 } : { valor: 199.90, limiteDias: 5 });
-            
             const texto = document.getElementById('texto-aviso-detalhes');
             texto.innerHTML = `Mensalidade: <strong>R$ ${Number(pInfo.valor).toFixed(2)}</strong> | Direito de uso: <strong>${pInfo.limiteDias} dias por mês</strong> | Vigência do Contrato: <strong>12 meses (Renovação automática)</strong>`;
         };
@@ -370,13 +377,7 @@
                 if (snapshot.exists()) { alert("Este CPF já está cadastrado!"); return; }
 
                 await set(ref(db, `socios/${cpfKey}`), { 
-                    nome, 
-                    cpf: cpfRaw, 
-                    tel, 
-                    email, 
-                    plano, 
-                    parcelasPagas: 0, 
-                    dataAssoc: new Date().toISOString() 
+                    nome, cpf: cpfRaw, tel, email, plano, parcelasPagas: 0, dataAssoc: new Date().toISOString() 
                 });
 
                 alert("Cadastro realizado com sucesso! Contrato de 12 meses aceito e carnê digital gerado com base na data exata de hoje.");
@@ -418,12 +419,10 @@
                 const listaBoletos = document.getElementById('lista-boletos');
                 listaBoletos.innerHTML = '';
                 const valorMensalidade = `R$ ${pInfo.valor.toFixed(2)}`;
-
                 let dataBaseVencimento = socio.dataAssoc ? new Date(socio.dataAssoc) : new Date();
 
                 for(let i = 1; i <= 12; i++) {
                     const paga = i <= pagas;
-                    
                     let dataVenc = new Date(dataBaseVencimento);
                     dataVenc.setMonth(dataVenc.getMonth() + (i - 1));
                     
@@ -434,7 +433,6 @@
 
                     const div = document.createElement('div');
                     div.className = `p-4 rounded-xl border flex flex-col md:flex-row justify-between items-center gap-4 ${paga ? 'bg-stone-900/40 border-emerald-500/30' : 'bg-stone-900 border-stone-800'}`;
-                    
                     div.innerHTML = `
                         <div>
                             <span class="text-xs font-bold text-amber-500 uppercase">Parcela ${i} / 12 (Contrato Anual)</span>
@@ -452,16 +450,16 @@
             } catch (error) { console.error(error); }
         };
 
+        // ENVIADO PARA O WHATSAPP DE SÓCIOS
         window.pagarBoleto = function(numParcela, valor, dataVenc) {
             const msg = `Olá! Gostaria de realizar o pagamento da Parcela ${numParcela}/12 (Vencimento: ${dataVenc} - ${valor}) do meu plano no Hotel dos Sonhos Fazenda. Poderia me enviar o código Pix ou boleto?`;
-            window.open(`https://wa.me/${WHATSAPP_HOTEL}?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/${WHATSAPP_SOCIO}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
         window.carregarGridApartamentos = async function() {
             try {
                 const snapRes = await get(child(ref(db), 'reservas'));
                 const reservas = snapRes.exists() ? snapRes.val() : {};
-                
                 const grid = document.getElementById('grid-apartamentos');
                 grid.innerHTML = '';
                 const select = document.getElementById('res-unidade');
@@ -470,7 +468,6 @@
                 for(let i = 1; i <= 76; i++) {
                     const isSuite = i <= 6;
                     const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-6}`;
-                    
                     const opt = document.createElement('option');
                     opt.value = nomeUnidade;
                     opt.textContent = nomeUnidade;
@@ -494,7 +491,6 @@
                 const selectFiltro = document.getElementById('cal-unidade-filtro');
                 const selectForm = document.getElementById('av-unidade');
                 const mesFiltro = document.getElementById('cal-mes-filtro');
-
                 selectFiltro.innerHTML = '';
                 selectForm.innerHTML = '';
 
@@ -521,15 +517,14 @@
             grade.innerHTML = '';
 
             if(!unidadeEscolhida || !valorMes) return;
-
             const [anoStr, mesStr] = valorMes.split('-');
             const ano = parseInt(anoStr);
             const mes = parseInt(mesStr) - 1;
 
             const snapRes = await get(child(ref(db), 'reservas'));
             const reservas = snapRes.exists() ? snapRes.val() : {};
-
             const diasOcupados = new Set();
+
             Object.values(reservas).forEach(r => {
                 if(r.unidade === unidadeEscolhida && (r.status === 'Confirmada' || r.status === 'Pendente')) {
                     const dInicio = new Date(r.checkin + 'T00:00:00');
@@ -548,7 +543,6 @@
 
             const primeiroDia = new Date(ano, mes, 1).getDay();
             const ultimoDia = new Date(ano, mes + 1, 0).getDate();
-
             for(let i = 0; i < primeiroDia; i++) grade.appendChild(document.createElement('div'));
 
             for(let dia = 1; dia <= ultimoDia; dia++) {
@@ -666,6 +660,7 @@
             } catch(err) { alert("Erro: " + err.message); }
         };
 
+        // ENVIADO PARA O WHATSAPP DE CLIENTES AVULSOS
         window.realizarReservaAvulsoFirebase = async function(e) {
             e.preventDefault();
             const nome = document.getElementById('av-nome').value;
@@ -714,8 +709,8 @@
             });
 
             const msg = `Olá! Solicitei reserva avulsa no Hotel dos Sonhos Fazenda.%0A*Hóspede:* ${nome}%0A*Unidade:* ${unidade}%0A*Check-in:* ${checkin}%0A*Check-out:* ${checkout}%0A*Total:* R$ ${total.toLocaleString('pt-BR', {minFractionDigits: 2})}`;
-            window.open(`https://wa.me/${WHATSAPP_HOTEL}?text=${msg}`, '_blank');
-            alert("Reserva enviada! Redirecionando para o WhatsApp...");
+            window.open(`https://wa.me/${WHATSAPP_AVULSO}?text=${msg}`, '_blank');
+            alert("Reserva enviada! Redirecionando para o WhatsApp de atendimento avulso...");
             document.querySelector('form').reset();
             document.getElementById('box-orcamento').classList.add('hidden');
             switchTab('home');
