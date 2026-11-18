@@ -40,7 +40,7 @@
                 <img src="https://i.imgur.com/wx6l3ac.png" alt="Logo" class="h-12 w-auto object-contain rounded bg-stone-950 p-1">
                 <div>
                     <h2 class="font-serif text-2xl font-bold text-amber-500">Painel Administrativo - Nova Gestão</h2>
-                    <p class="text-xs text-stone-400">Controle de Valores, Planos, Limites de Dias e Reservas em Tempo Real</p>
+                    <p class="text-xs text-stone-400">Controle de Valores, Planos, Limites de Dias, WhatsApps e Reservas</p>
                 </div>
             </div>
             <div class="flex gap-3">
@@ -54,6 +54,33 @@
             <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Faturamento Est. (Mensalidade)</span><span id="adm-faturamento" class="text-3xl font-extrabold text-amber-500 mt-1 block">R$ 0,00</span></div>
             <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Quartos Confirmados</span><span id="adm-quartos-ocupados" class="text-3xl font-extrabold text-white mt-1 block">0 / 76</span></div>
             <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Taxa de Ocupação</span><span id="adm-taxa-ocupacao" class="text-3xl font-extrabold text-emerald-400 mt-1 block">0%</span></div>
+        </div>
+
+        <!-- NOVO: SEÇÃO DE CONFIGURAÇÃO DE WHATSAPP (AVULSO E SÓCIOS) -->
+        <div class="bg-stone-900 border border-emerald-600/30 p-6 rounded-2xl shadow-xl space-y-4">
+            <div>
+                <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded border border-emerald-500/20 uppercase">Configuração de Atendimento</span>
+                <h3 class="font-serif text-xl font-bold text-white mt-2"><i class="fa-brands fa-whatsapp text-emerald-500 mr-2"></i>Gerenciar Números de WhatsApp para Reservas</h3>
+                <p class="text-xs text-stone-400 mt-1">Defina para qual WhatsApp vão os pedidos de clientes avulsos e de associados/sócios. Exige senha <strong>Saadmin</strong>.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <div class="bg-stone-950 border border-stone-800 p-5 rounded-xl space-y-3">
+                    <h4 class="font-bold text-emerald-400 text-base"><i class="fa-solid fa-bed mr-1"></i> WhatsApp - Clientes Avulsos</h4>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Número (com DDD e DDI)</label>
+                        <input type="text" id="whats-avulso" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="Ex: 5541996278447">
+                    </div>
+                </div>
+
+                <div class="bg-stone-950 border border-stone-800 p-5 rounded-xl space-y-3">
+                    <h4 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-users mr-1"></i> WhatsApp - Clientes Associados (Sócios)</h4>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Número (com DDD e DDI)</label>
+                        <input type="text" id="whats-socio" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="Ex: 5541996278447">
+                    </div>
+                </div>
+            </div>
+            <button onclick="salvarWhatsappsAdmin()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm transition"><i class="fa-solid fa-shield-halved mr-1"></i> Salvar Números de WhatsApp</button>
         </div>
 
         <!-- SEÇÃO: GESTÃO DE VALORES BASE (DIÁRIAS) -->
@@ -77,7 +104,7 @@
             </div>
         </div>
 
-        <!-- NOVO: SEÇÃO DE GESTÃO DE PLANOS DE SÓCIOS (VALORES E LIMITES DE DIAS) -->
+        <!-- SEÇÃO DE GESTÃO DE PLANOS DE SÓCIOS (VALORES E LIMITES DE DIAS) -->
         <div class="bg-stone-900 border border-amber-600/30 p-6 rounded-2xl shadow-xl space-y-4">
             <div>
                 <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded border border-amber-500/20 uppercase">Configuração de Sócios</span>
@@ -221,7 +248,7 @@
 
     <footer class="mt-8 text-center text-stone-600 text-xs"><p>&copy; 2026 Hotel dos Sonhos Fazenda. Painel Administrativo Seguro.</p></footer>
 
-    <!-- FIREBASE ADMIN COM SENHA SAADMIN PARA EXCLUIR SÓCIOS E CANCELAR RESERVAS -->
+    <!-- FIREBASE ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, set, update, remove, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -253,7 +280,18 @@
         };
 
         function iniciarEscutaTempoReal() {
-            // Preços base de diárias
+            // Carregar WhatsApps salvos
+            onValue(ref(db, 'configuracoes/whatsapps'), (snapshot) => {
+                if(snapshot.exists()) {
+                    const w = snapshot.val();
+                    if(document.activeElement !== document.getElementById('whats-avulso')) document.getElementById('whats-avulso').value = w.avulso || '5541996278447';
+                    if(document.activeElement !== document.getElementById('whats-socio')) document.getElementById('whats-socio').value = w.socio || '5541996278447';
+                } else {
+                    document.getElementById('whats-avulso').value = '5541996278447';
+                    document.getElementById('whats-socio').value = '5541996278447';
+                }
+            });
+
             onValue(ref(db, 'configuracoes/precos'), (snapshot) => {
                 if(snapshot.exists()) {
                     const p = snapshot.val();
@@ -262,24 +300,15 @@
                 }
             });
 
-            // Configurações dos Planos (Valores e Limites de Dias)
             onValue(ref(db, 'configuracoes/planos'), (snapshot) => {
                 const planos = snapshot.exists() ? snapshot.val() : {};
-                
                 if(planos.padrao) {
                     if(document.activeElement !== document.getElementById('plano-padrao-valor')) document.getElementById('plano-padrao-valor').value = planos.padrao.valor || 199.90;
                     if(document.activeElement !== document.getElementById('plano-padrao-limite')) document.getElementById('plano-padrao-limite').value = planos.padrao.limiteDias || 5;
-                } else {
-                    document.getElementById('plano-padrao-valor').value = 199.90;
-                    document.getElementById('plano-padrao-limite').value = 5;
                 }
-
                 if(planos.vip) {
                     if(document.activeElement !== document.getElementById('plano-vip-valor')) document.getElementById('plano-vip-valor').value = planos.vip.valor || 299.90;
                     if(document.activeElement !== document.getElementById('plano-vip-limite')) document.getElementById('plano-vip-limite').value = planos.vip.limiteDias || 10;
-                } else {
-                    document.getElementById('plano-vip-valor').value = 299.90;
-                    document.getElementById('plano-vip-limite').value = 10;
                 }
             });
 
@@ -297,13 +326,11 @@
                 }
             });
 
-            // Escuta Sócios
             onValue(ref(db, 'socios'), (snapshot) => {
                 cacheSocios = snapshot.exists() ? snapshot.val() : {};
                 renderizarTabelaSocios(cacheSocios);
             });
 
-            // Escuta Reservas
             onValue(ref(db, 'reservas'), (snapshot) => {
                 const reservas = snapshot.exists() ? snapshot.val() : {};
                 const arrRes = Object.entries(reservas);
@@ -346,7 +373,22 @@
             }
         }
 
-        // Função para salvar as alterações de valor e limite de dias do plano
+        // SALVAR WHATSAPPS COM SENHA SAADMIN
+        window.salvarWhatsappsAdmin = async function() {
+            const senhaDigitada = prompt("Insira a senha administrativa para alterar os números de WhatsApp (Saadmin):");
+            if(senhaDigitada !== 'Saadmin') { alert("Senha incorreta!"); return; }
+
+            const avulso = document.getElementById('whats-avulso').value.trim();
+            const socio = document.getElementById('whats-socio').value.trim();
+
+            if(!avulso || !socio) { alert("Preencha ambos os números de WhatsApp."); return; }
+
+            try {
+                await set(ref(db, 'configuracoes/whatsapps'), { avulso, socio });
+                alert("Números de WhatsApp atualizados com sucesso!");
+            } catch(err) { alert("Erro ao salvar: " + err.message); }
+        };
+
         window.salvarPlanoConfig = async function(tipoPlano) {
             const senhaDigitada = prompt("Insira a senha administrativa para alterar o plano (Saadmin):");
             if(senhaDigitada !== 'Saadmin') { alert("Senha incorreta!"); return; }
@@ -354,17 +396,12 @@
             const valor = parseFloat(document.getElementById(`plano-${tipoPlano}-valor`).value);
             const limiteDias = parseInt(document.getElementById(`plano-${tipoPlano}-limite`).value);
 
-            if(isNaN(valor) || isNaN(limiteDias)) {
-                alert("Preencha valores válidos.");
-                return;
-            }
+            if(isNaN(valor) || isNaN(limiteDias)) { alert("Preencha valores válidos."); return; }
 
             try {
                 await update(ref(db, `configuracoes/planos/${tipoPlano}`), { valor, limiteDias });
                 alert(`Configurações do Plano ${tipoPlano.toUpperCase()} salvas com sucesso!`);
-            } catch(err) {
-                alert("Erro ao salvar: " + err.message);
-            }
+            } catch(err) { alert("Erro ao salvar: " + err.message); }
         };
 
         window.renderizarTabelaSocios = function(sociosObj) {
@@ -420,9 +457,7 @@
             });
         };
 
-        window.filtrarSocios = function() {
-            renderizarTabelaSocios(cacheSocios);
-        };
+        window.filtrarSocios = function() { renderizarTabelaSocios(cacheSocios); };
 
         window.cobrarSocioWhatsApp = function(tel, nome, parcela) {
             let numLimpo = tel.replace(/\D/g, '');
@@ -489,13 +524,9 @@
             }
         };
 
-        // EXCLUIR SÓCIO EXIGINDO SENHA SAADMIN
         window.excluirSocio = async function(cpfKey) {
             const senhaDigitada = prompt("🔒 Validação Gerencial\n\nDigite a senha do gerente (Saadmin) para confirmar a exclusão deste sócio:");
-            if(senhaDigitada !== 'Saadmin') {
-                alert("❌ Senha incorreta! Exclusão cancelada.");
-                return;
-            }
+            if(senhaDigitada !== 'Saadmin') { alert("❌ Senha incorreta! Exclusão cancelada."); return; }
 
             try {
                 await remove(ref(db, `socios/${cpfKey}`));
@@ -503,13 +534,9 @@
             } catch(err) { alert("Erro ao excluir: " + err.message); }
         };
 
-        // CANCELAR/EXCLUIR RESERVA EXIGINDO SENHA SAADMIN
         window.excluirReserva = async function(resKey) {
             const senhaDigitada = prompt("🔒 Validação Gerencial\n\nDigite a senha do gerente (Saadmin) para confirmar o cancelamento desta reserva:");
-            if(senhaDigitada !== 'Saadmin') {
-                alert("❌ Senha incorreta! Cancelamento de reserva bloqueado.");
-                return;
-            }
+            if(senhaDigitada !== 'Saadmin') { alert("❌ Senha incorreta! Cancelamento de reserva bloqueado."); return; }
 
             try {
                 await remove(ref(db, `reservas/${resKey}`));
