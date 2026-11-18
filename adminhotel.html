@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Hotel dos Sonhos Fazenda</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="bg-stone-950 text-stone-100 min-h-screen flex flex-col justify-between p-4 md:p-8">
+
+    <!-- MODAL DE LOGIN ADMIN -->
+    <div id="modal-admin-login" class="fixed inset-0 bg-stone-950 z-50 flex items-center justify-center p-4">
+        <div class="bg-stone-900 border border-stone-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-6">
+            <div class="text-center space-y-2">
+                <img src="https://i.imgur.com/wx6l3ac.png" alt="Logo" class="h-16 mx-auto object-contain bg-stone-950 p-1 rounded border border-amber-600/30">
+                <h3 class="font-serif text-2xl font-bold text-amber-500">Gestão Exclusiva</h3>
+                <p class="text-xs text-stone-400">Insira a senha de administração da nova dona.</p>
+            </div>
+            <form onsubmit="fazerLoginAdmin(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="senha-adm" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-white text-center tracking-widest focus:outline-none focus:border-amber-500" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-3 rounded-xl transition">Entrar no Painel</button>
+                <div class="text-center"><a href="index.html" class="text-xs text-stone-500 hover:text-stone-300"><i class="fa-solid fa-arrow-left mr-1"></i>Voltar ao Site Principal</a></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAINEL DE GESTÃO -->
+    <div id="painel-conteudo" class="hidden max-w-7xl mx-auto w-full space-y-8 flex-grow">
+        <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl">
+            <div class="flex items-center gap-4">
+                <img src="https://i.imgur.com/wx6l3ac.png" alt="Logo" class="h-12 w-auto object-contain rounded bg-stone-950 p-1">
+                <div>
+                    <h2 class="font-serif text-2xl font-bold text-amber-500">Painel Administrativo - Nova Gestão</h2>
+                    <p class="text-xs text-stone-400">Controle de Valores, Planos, Limites de Dias e Reservas em Tempo Real</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <a href="index.html" class="bg-stone-800 hover:bg-stone-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition"><i class="fa-solid fa-globe mr-2"></i>Ver Site</a>
+                <button onclick="location.reload()" class="bg-amber-950 text-amber-400 border border-amber-600/40 px-4 py-2.5 rounded-xl font-semibold text-sm transition"><i class="fa-solid fa-right-from-bracket mr-2"></i>Sair</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Total de Sócios</span><span id="adm-total-socios" class="text-3xl font-extrabold text-white mt-1 block">0</span></div>
+            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Faturamento Est. (Mensalidade)</span><span id="adm-faturamento" class="text-3xl font-extrabold text-amber-500 mt-1 block">R$ 0,00</span></div>
+            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Quartos Confirmados</span><span id="adm-quartos-ocupados" class="text-3xl font-extrabold text-white mt-1 block">0 / 76</span></div>
+            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Taxa de Ocupação</span><span id="adm-taxa-ocupacao" class="text-3xl font-extrabold text-emerald-400 mt-1 block">0%</span></div>
+        </div>
+
+        <!-- SEÇÃO: GESTÃO DE VALORES BASE (DIÁRIAS) -->
+        <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <div>
+                <h3 class="font-serif text-xl font-bold text-white"><i class="fa-solid fa-tags text-amber-500 mr-2"></i>Gestão de Valores Base (Diárias Avulsas)</h3>
+                <p class="text-xs text-stone-400 mt-1">Valores padrão para diárias. Exige senha <strong>Saadmin</strong>.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Diária Apt. Standard (R$)</label>
+                    <input type="number" step="0.01" id="preco-standard" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="250.00">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Diária Suíte c/ Lareira (R$)</label>
+                    <input type="number" step="0.01" id="preco-suite" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="400.00">
+                </div>
+                <div class="flex items-end">
+                    <button onclick="salvarNovosPrecos()" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-2.5 rounded-xl transition"><i class="fa-solid fa-shield-halved mr-1"></i> Salvar Diárias Base</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOVO: SEÇÃO DE GESTÃO DE PLANOS DE SÓCIOS (VALORES E LIMITES DE DIAS) -->
+        <div class="bg-stone-900 border border-amber-600/30 p-6 rounded-2xl shadow-xl space-y-4">
+            <div>
+                <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded border border-amber-500/20 uppercase">Configuração de Sócios</span>
+                <h3 class="font-serif text-xl font-bold text-white mt-2"><i class="fa-solid fa-id-card text-amber-500 mr-2"></i>Gestão de Valores e Limites de Dias dos Planos</h3>
+                <p class="text-xs text-stone-400 mt-1">Defina quanto custa a mensalidade e quantos dias por mês cada plano pode reservar. Exige senha <strong>Saadmin</strong>.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <!-- Plano Padrão -->
+                <div class="bg-stone-950 border border-stone-800 p-5 rounded-xl space-y-3">
+                    <h4 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-user mr-1"></i> Plano Padrão (Standard)</h4>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Valor da Mensalidade (R$)</label>
+                        <input type="number" step="0.01" id="plano-padrao-valor" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="199.90">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Limite de Dias por Mês</label>
+                        <input type="number" id="plano-padrao-limite" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="5">
+                    </div>
+                    <button onclick="salvarPlanoConfig('padrao')" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-2 rounded-xl text-sm transition">Salvar Plano Padrão</button>
+                </div>
+
+                <!-- Plano VIP -->
+                <div class="bg-stone-950 border border-stone-800 p-5 rounded-xl space-y-3">
+                    <h4 class="font-bold text-amber-400 text-base"><i class="fa-solid fa-fire mr-1"></i> Plano VIP (Suíte com Lareira)</h4>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Valor da Mensalidade (R$)</label>
+                        <input type="number" step="0.01" id="plano-vip-valor" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="299.90">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Limite de Dias por Mês</label>
+                        <input type="number" id="plano-vip-limite" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="10">
+                    </div>
+                    <button onclick="salvarPlanoConfig('vip')" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-2 rounded-xl text-sm transition">Salvar Plano VIP</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO: PROMOÇÕES SEPARADAS (STANDARD E SUÍTE) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- PROMOÇÃO APARTAMENTO STANDARD -->
+            <div class="bg-stone-900 border border-amber-600/30 p-6 rounded-2xl shadow-xl space-y-4">
+                <div>
+                    <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded border border-amber-500/20 uppercase">Oferta Exclusiva</span>
+                    <h3 class="font-serif text-lg font-bold text-white mt-2"><i class="fa-solid fa-door-closed text-amber-500 mr-2"></i>Promoção Apt. Standard</h3>
+                    <p class="text-xs text-stone-400 mt-1">Ex: Inclui café reforçado ou petiscos.</p>
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Título da Promoção (Standard)</label>
+                        <input type="text" id="promo-std-titulo" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="Ex: Apt Standard + Café Colonial Grátis">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Valor Promocional da Diária (R$)</label>
+                        <input type="number" step="0.01" id="promo-std-valor" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="199.90">
+                    </div>
+                    <button onclick="salvarPromoStandard()" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-2.5 rounded-xl text-sm transition"><i class="fa-solid fa-bullhorn mr-1"></i> Publicar Promo Standard</button>
+                </div>
+            </div>
+
+            <!-- PROMOÇÃO SUÍTE COM LAREIRA -->
+            <div class="bg-stone-900 border border-amber-600/30 p-6 rounded-2xl shadow-xl space-y-4">
+                <div>
+                    <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded border border-amber-500/20 uppercase">Oferta VIP Exclusiva</span>
+                    <h3 class="font-serif text-lg font-bold text-white mt-2"><i class="fa-solid fa-fire text-amber-500 mr-2"></i>Promoção Suíte com Lareira</h3>
+                    <p class="text-xs text-stone-400 mt-1">Ex: Inclui Jantar romântico e vinho.</p>
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Título da Promoção (Suíte)</label>
+                        <input type="text" id="promo-suite-titulo" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="Ex: Suíte Lareira + Jantar Romântico & Vinho">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Valor Promocional da Suíte (R$)</label>
+                        <input type="number" step="0.01" id="promo-suite-valor" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="320.00">
+                    </div>
+                    <button onclick="salvarPromoSuite()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-sm transition"><i class="fa-solid fa-bullhorn mr-1"></i> Publicar Promo Suíte</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO: GESTÃO DE RESERVAS -->
+        <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h3 class="font-serif text-xl font-bold text-white"><i class="fa-solid fa-calendar-check text-amber-500 mr-2"></i>Controle de Reservas & Solicitações Pendentes</h3>
+                    <p class="text-xs text-stone-400 mt-1">Aqui aparecem os clientes que solicitaram via WhatsApp. Confirme após o pagamento ou cancele para liberar a vaga.</p>
+                </div>
+                <button onclick="abrirModalReservaManual()" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-4 py-2 rounded-xl text-sm transition whitespace-nowrap"><i class="fa-solid fa-plus mr-2"></i>Nova Reserva Manual</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-stone-300">
+                    <thead class="bg-stone-950 text-stone-400 uppercase text-xs">
+                        <tr><th class="p-3">Unidade</th><th class="p-3">Tipo</th><th class="p-3">Cliente / Hóspede</th><th class="p-3">Contato WhatsApp</th><th class="p-3">Check-in / Out</th><th class="p-3">Status</th><th class="p-3">Ações da Gestão</th></tr>
+                    </thead>
+                    <tbody id="tabela-adm-reservas" class="divide-y divide-stone-800"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SEÇÃO: SÓCIOS COM LUPA DE BUSCA RÁPIDA -->
+        <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h3 class="font-serif text-xl font-bold text-white"><i class="fa-solid fa-users text-amber-500 mr-2"></i>Lista de Sócios & Pagamentos</h3>
+                    <p class="text-xs text-stone-400 mt-1">Gerencie os associados, dê baixa em parcelas ou faça cobranças.</p>
+                </div>
+                <!-- LUPA DE BUSCA DE SÓCIOS -->
+                <div class="relative w-full md:w-72">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="filtro-socios" oninput="filtrarSocios()" class="w-full bg-stone-950 border border-stone-800 rounded-xl pl-10 pr-4 py-2 text-white text-sm focus:outline-none focus:border-amber-500" placeholder="Buscar por nome ou CPF...">
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-stone-300">
+                    <thead class="bg-stone-950 text-stone-400 uppercase text-xs">
+                        <tr><th class="p-3">Nome</th><th class="p-3">CPF</th><th class="p-3">Contato</th><th class="p-3">Plano</th><th class="p-3">Parcelas Pagas</th><th class="p-3">Ações</th></tr>
+                    </thead>
+                    <tbody id="tabela-adm-socios" class="divide-y divide-stone-800"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MANUAL -->
+    <div id="modal-reserva-manual" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-stone-900 border border-stone-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-6">
+            <div class="flex justify-between items-center"><h3 class="font-serif text-xl font-bold text-white">Criar Reserva Manual</h3><button onclick="fecharModalReservaManual()" class="text-stone-400"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+            <form onsubmit="criarReservaManualAdmin(event)" class="space-y-4">
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Nome do Hóspede</label><input type="text" id="man-nome" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="Roberto Carlos"></div>
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">WhatsApp</label><input type="text" id="man-tel" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="(41) 99999-9999"></div>
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Unidade</label><select id="man-unidade" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white"></select></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Check-in</label><input type="date" id="man-checkin" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white"></div>
+                    <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Check-out</label><input type="date" id="man-checkout" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white"></div>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold py-3 rounded-xl transition">Salvar Reserva</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-center text-stone-600 text-xs"><p>&copy; 2026 Hotel dos Sonhos Fazenda. Painel Administrativo Seguro.</p></footer>
+
+    <!-- FIREBASE ADMIN COM SENHA SAADMIN PARA EXCLUIR SÓCIOS E CANCELAR RESERVAS -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set, update, remove, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpNd_FpemL3UkI2wmW_LTJBCFtAwk04YU",
+            authDomain: "hotel-3024e.firebaseapp.com",
+            databaseURL: "https://hotel-3024e-default-rtdb.firebaseio.com",
+            projectId: "hotel-3024e",
+            storageBucket: "hotel-3024e.firebasestorage.app",
+            messagingSenderId: "650878540892",
+            appId: "1:650878540892:web:d0522d32cb320df2531a99",
+            measurementId: "G-XN5GE8H756"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let cacheSocios = {}; 
+
+        window.fazerLoginAdmin = function(e) {
+            e.preventDefault();
+            const senha = document.getElementById('senha-adm').value;
+            if(senha === 'Sa200783') {
+                document.getElementById('modal-admin-login').classList.add('hidden');
+                document.getElementById('painel-conteudo').classList.remove('hidden');
+                iniciarEscutaTempoReal();
+            } else { alert("Senha incorreta!"); }
+        };
+
+        function iniciarEscutaTempoReal() {
+            // Preços base de diárias
+            onValue(ref(db, 'configuracoes/precos'), (snapshot) => {
+                if(snapshot.exists()) {
+                    const p = snapshot.val();
+                    if(document.activeElement !== document.getElementById('preco-standard')) document.getElementById('preco-standard').value = p.standard || 250.00;
+                    if(document.activeElement !== document.getElementById('preco-suite')) document.getElementById('preco-suite').value = p.suite || 400.00;
+                }
+            });
+
+            // Configurações dos Planos (Valores e Limites de Dias)
+            onValue(ref(db, 'configuracoes/planos'), (snapshot) => {
+                const planos = snapshot.exists() ? snapshot.val() : {};
+                
+                if(planos.padrao) {
+                    if(document.activeElement !== document.getElementById('plano-padrao-valor')) document.getElementById('plano-padrao-valor').value = planos.padrao.valor || 199.90;
+                    if(document.activeElement !== document.getElementById('plano-padrao-limite')) document.getElementById('plano-padrao-limite').value = planos.padrao.limiteDias || 5;
+                } else {
+                    document.getElementById('plano-padrao-valor').value = 199.90;
+                    document.getElementById('plano-padrao-limite').value = 5;
+                }
+
+                if(planos.vip) {
+                    if(document.activeElement !== document.getElementById('plano-vip-valor')) document.getElementById('plano-vip-valor').value = planos.vip.valor || 299.90;
+                    if(document.activeElement !== document.getElementById('plano-vip-limite')) document.getElementById('plano-vip-limite').value = planos.vip.limiteDias || 10;
+                } else {
+                    document.getElementById('plano-vip-valor').value = 299.90;
+                    document.getElementById('plano-vip-limite').value = 10;
+                }
+            });
+
+            onValue(ref(db, 'configuracoes/promo_standard'), (snapshot) => {
+                if(snapshot.exists() && document.activeElement !== document.getElementById('promo-std-titulo')) {
+                    document.getElementById('promo-std-titulo').value = snapshot.val().titulo || '';
+                    document.getElementById('promo-std-valor').value = snapshot.val().valor || '';
+                }
+            });
+
+            onValue(ref(db, 'configuracoes/promo_suite'), (snapshot) => {
+                if(snapshot.exists() && document.activeElement !== document.getElementById('promo-suite-titulo')) {
+                    document.getElementById('promo-suite-titulo').value = snapshot.val().titulo || '';
+                    document.getElementById('promo-suite-valor').value = snapshot.val().valor || '';
+                }
+            });
+
+            // Escuta Sócios
+            onValue(ref(db, 'socios'), (snapshot) => {
+                cacheSocios = snapshot.exists() ? snapshot.val() : {};
+                renderizarTabelaSocios(cacheSocios);
+            });
+
+            // Escuta Reservas
+            onValue(ref(db, 'reservas'), (snapshot) => {
+                const reservas = snapshot.exists() ? snapshot.val() : {};
+                const arrRes = Object.entries(reservas);
+                const ocupados = arrRes.filter(([k, r]) => r.status === 'Confirmada').length;
+                
+                document.getElementById('adm-quartos-ocupados').innerText = `${ocupados} / 76`;
+                document.getElementById('adm-taxa-ocupacao').innerText = `${((ocupados / 76) * 100).toFixed(1)}%`;
+
+                const tbodyRes = document.getElementById('tabela-adm-reservas');
+                tbodyRes.innerHTML = '';
+                if(arrRes.length === 0) {
+                    tbodyRes.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-stone-500">Nenhuma reserva ou solicitação registrada.</td></tr>`;
+                } else {
+                    arrRes.forEach(([resKey, r]) => {
+                        const isPendente = r.status === 'Pendente';
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="p-3 font-bold text-white">${r.unidade}</td>
+                            <td class="p-3"><span class="bg-stone-800 text-amber-400 px-2 py-0.5 rounded text-xs">${r.tipo || 'Sócio'}</span></td>
+                            <td class="p-3 font-semibold">${r.nome}</td>
+                            <td class="p-3 text-amber-400"><a href="https://wa.me/55${r.contato.replace(/\D/g, '')}" target="_blank" class="hover:underline"><i class="fa-brands fa-whatsapp mr-1"></i>${r.contato || '-'}</a></td>
+                            <td class="p-3 text-xs">${r.checkin} até ${r.checkout}</td>
+                            <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${isPendente ? 'bg-amber-500/20 text-amber-400 animate-pulse' : 'bg-emerald-500/20 text-emerald-400'}">${r.status === 'Pendente' ? 'Aguardando Confirmação' : 'Confirmada'}</span></td>
+                            <td class="p-3 flex gap-2">
+                                ${isPendente ? `<button onclick="confirmarReserva('${resKey}', '${r.contato}', '${r.nome}', '${r.unidade}', '${r.checkin}', '${r.checkout}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1"><i class="fa-solid fa-check"></i> Aprovar & WhatsApp</button>` : ''}
+                                <button onclick="excluirReserva('${resKey}')" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1"><i class="fa-solid fa-xmark"></i> ${isPendente ? 'Recusar / Liberar' : 'Cancelar'}</button>
+                            </td>
+                        `;
+                        tbodyRes.appendChild(tr);
+                    });
+                }
+            });
+
+            const selectUnidade = document.getElementById('man-unidade');
+            selectUnidade.innerHTML = '';
+            for(let i = 1; i <= 76; i++) {
+                const isSuite = i <= 6;
+                const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-6}`;
+                selectUnidade.appendChild(new Option(nomeUnidade, nomeUnidade));
+            }
+        }
+
+        // Função para salvar as alterações de valor e limite de dias do plano
+        window.salvarPlanoConfig = async function(tipoPlano) {
+            const senhaDigitada = prompt("Insira a senha administrativa para alterar o plano (Saadmin):");
+            if(senhaDigitada !== 'Saadmin') { alert("Senha incorreta!"); return; }
+
+            const valor = parseFloat(document.getElementById(`plano-${tipoPlano}-valor`).value);
+            const limiteDias = parseInt(document.getElementById(`plano-${tipoPlano}-limite`).value);
+
+            if(isNaN(valor) || isNaN(limiteDias)) {
+                alert("Preencha valores válidos.");
+                return;
+            }
+
+            try {
+                await update(ref(db, `configuracoes/planos/${tipoPlano}`), { valor, limiteDias });
+                alert(`Configurações do Plano ${tipoPlano.toUpperCase()} salvas com sucesso!`);
+            } catch(err) {
+                alert("Erro ao salvar: " + err.message);
+            }
+        };
+
+        window.renderizarTabelaSocios = function(sociosObj) {
+            const arrSocios = Object.entries(sociosObj);
+            document.getElementById('adm-total-socios').innerText = arrSocios.length;
+            
+            let faturamento = 0;
+            arrSocios.forEach(([key, s]) => { faturamento += (s.plano === 'vip' ? 299.90 : 199.90); });
+            document.getElementById('adm-faturamento').innerText = `R$ ${faturamento.toLocaleString('pt-BR', {minFractionDigits: 2})}`;
+
+            const termoBusca = document.getElementById('filtro-socios').value.toLowerCase().trim();
+            const tbodySocios = document.getElementById('tabela-adm-socios');
+            tbodySocios.innerHTML = '';
+
+            const sociosFiltrados = arrSocios.filter(([cpfKey, s]) => {
+                const nome = (s.nome || '').toLowerCase();
+                const cpf = (s.cpf || '').toLowerCase();
+                return nome.includes(termoBusca) || cpf.includes(termoBusca);
+            });
+
+            if(sociosFiltrados.length === 0) {
+                tbodySocios.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">Nenhum sócio encontrado.</td></tr>`;
+                return;
+            }
+
+            sociosFiltrados.forEach(([cpfKey, s]) => {
+                const pagas = s.parcelasPagas || 0;
+                const inadimplente = pagas < 3;
+                const proximaParcela = pagas + 1;
+
+                const tr = document.createElement('tr');
+                tr.className = inadimplente ? 'bg-rose-950/20' : '';
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-white flex items-center gap-2">
+                        ${inadimplente ? '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>' : ''}
+                        ${s.nome}
+                    </td>
+                    <td class="p-3 font-mono text-xs">${s.cpf || '-'}</td>
+                    <td class="p-3">${s.tel}</td>
+                    <td class="p-3 uppercase text-xs font-bold text-amber-400">${s.plano}</td>
+                    <td class="p-3">
+                        <span class="px-2.5 py-1 rounded text-xs font-bold ${pagas >= 3 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400 animate-pulse'}">
+                            ${pagas} / 12 pagas ${inadimplente ? '⚠️' : ''}
+                        </span>
+                    </td>
+                    <td class="p-3 flex gap-2">
+                        <button onclick="adicionarParcela('${cpfKey}', ${pagas})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-xs font-semibold transition">+1 Parcela</button>
+                        ${inadimplente ? `<button onclick="cobrarSocioWhatsApp('${s.tel}', '${s.nome}', ${proximaParcela})" class="bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold px-3 py-1 rounded text-xs transition flex items-center gap-1"><i class="fa-brands fa-whatsapp"></i> Cobrar</button>` : ''}
+                        <button onclick="excluirSocio('${cpfKey}')" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1 rounded text-xs transition">Excluir</button>
+                    </td>
+                `;
+                tbodySocios.appendChild(tr);
+            });
+        };
+
+        window.filtrarSocios = function() {
+            renderizarTabelaSocios(cacheSocios);
+        };
+
+        window.cobrarSocioWhatsApp = function(tel, nome, parcela) {
+            let numLimpo = tel.replace(/\D/g, '');
+            if(!numLimpo.startsWith('55')) numLimpo = '55' + numLimpo;
+            const msg = `Olá ${nome}! Notamos que a parcela ${parcela} do seu carnê no *Hotel dos Sonhos Fazenda* está em aberto. Para regularizar e liberar suas reservas de sócio, por favor efetue o pagamento. Qualquer dúvida estamos à disposição!`;
+            window.open(`https://wa.me/${numLimpo}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.salvarNovosPrecos = async function() {
+            const senhaDigitada = prompt("Insira a senha administrativa para alterar as diárias (Saadmin):");
+            if(senhaDigitada !== 'Saadmin') { alert("Senha incorreta!"); return; }
+
+            const precoStandard = parseFloat(document.getElementById('preco-standard').value);
+            const precoSuite = parseFloat(document.getElementById('preco-suite').value);
+
+            try {
+                await set(ref(db, 'configuracoes/precos'), { standard: precoStandard, suite: precoSuite });
+                alert("Preços base atualizados com sucesso!");
+            } catch(err) { alert("Erro ao salvar: " + err.message); }
+        };
+
+        window.salvarPromoStandard = async function() {
+            const senhaDigitada = prompt("Insira a senha administrativa para publicar a promoção Standard (Saadmin):");
+            if(senhaDigitada !== 'Saadmin') { alert("Senha incorreta!"); return; }
+
+            const titulo = document.getElementById('promo-std-titulo').value;
+            const valor = parseFloat(document.getElementById('promo-std-valor').value);
+
+            try {
+                await set(ref(db, 'configuracoes/promo_standard'), { titulo, valor, ativa: true });
+                alert("Promoção para Apartamentos Standard publicada com sucesso!");
+            } catch(err) { alert("Erro ao publicar: " + err.message); }
+        };
+
+        window.salvarPromoSuite = async function() {
+            const senhaDigitada = prompt("Insira a senha administrativa para publicar a promoção da Suíte (Saadmin):");
+            if(senhaDigitada !== 'Saadmin') { alert("Senha incorreta!"); return; }
+
+            const titulo = document.getElementById('promo-suite-titulo').value;
+            const valor = parseFloat(document.getElementById('promo-suite-valor').value);
+
+            try {
+                await set(ref(db, 'configuracoes/promo_suite'), { titulo, valor, ativa: true });
+                alert("Promoção para Suítes com Lareira publicada com sucesso!");
+            } catch(err) { alert("Erro ao publicar: " + err.message); }
+        };
+
+        window.confirmarReserva = async function(resKey, telCliente, nomeCliente, unidade, checkin, checkout) {
+            if(confirm(`Deseja aprovar a reserva de ${nomeCliente} para a unidade ${unidade}?`)) {
+                try {
+                    await update(ref(db, `reservas/${resKey}`), { status: 'Confirmada' });
+                    let numLimpo = telCliente.replace(/\D/g, '');
+                    if(!numLimpo.startsWith('55')) numLimpo = '55' + numLimpo;
+
+                    const msgConfirmacao = `Olá ${nomeCliente}! Sua reserva no *Hotel dos Sonhos Fazenda* foi confirmada com sucesso!%0A%0A*Unidade:* ${unidade}%0A*Check-in:* ${checkin}%0A*Check-out:* ${checkout}%0A%0AAgradecemos a preferência!`;
+                    window.open(`https://wa.me/${numLimpo}?text=${msgConfirmacao}`, '_blank');
+                } catch(err) { alert("Erro ao confirmar reserva."); }
+            }
+        };
+
+        window.adicionarParcela = async function(cpfKey, atual) {
+            if(atual < 12) {
+                await update(ref(db, `socios/${cpfKey}`), { parcelasPagas: atual + 1 });
+            }
+        };
+
+        // EXCLUIR SÓCIO EXIGINDO SENHA SAADMIN
+        window.excluirSocio = async function(cpfKey) {
+            const senhaDigitada = prompt("🔒 Validação Gerencial\n\nDigite a senha do gerente (Saadmin) para confirmar a exclusão deste sócio:");
+            if(senhaDigitada !== 'Saadmin') {
+                alert("❌ Senha incorreta! Exclusão cancelada.");
+                return;
+            }
+
+            try {
+                await remove(ref(db, `socios/${cpfKey}`));
+                alert("Cadastro de sócio excluído com sucesso.");
+            } catch(err) { alert("Erro ao excluir: " + err.message); }
+        };
+
+        // CANCELAR/EXCLUIR RESERVA EXIGINDO SENHA SAADMIN
+        window.excluirReserva = async function(resKey) {
+            const senhaDigitada = prompt("🔒 Validação Gerencial\n\nDigite a senha do gerente (Saadmin) para confirmar o cancelamento desta reserva:");
+            if(senhaDigitada !== 'Saadmin') {
+                alert("❌ Senha incorreta! Cancelamento de reserva bloqueado.");
+                return;
+            }
+
+            try {
+                await remove(ref(db, `reservas/${resKey}`));
+                alert("Reserva cancelada com sucesso.");
+            } catch(err) { alert("Erro ao cancelar: " + err.message); }
+        };
+
+        window.abrirModalReservaManual = () => document.getElementById('modal-reserva-manual').classList.remove('hidden');
+        window.fecharModalReservaManual = () => document.getElementById('modal-reserva-manual').classList.add('hidden');
+
+        window.criarReservaManualAdmin = async function(e) {
+            e.preventDefault();
+            const nome = document.getElementById('man-nome').value;
+            const tel = document.getElementById('man-tel').value;
+            const unidade = document.getElementById('man-unidade').value;
+            const checkin = document.getElementById('man-checkin').value;
+            const checkout = document.getElementById('man-checkout').value;
+
+            try {
+                const novaReservaRef = child(ref(db), 'reservas');
+                const novaChave = Date.now();
+                await set(child(novaReservaRef, novaChave), { unidade, tipo: 'Manual (Telefone)', nome, contato: tel, checkin, checkout, status: 'Confirmada' });
+                
+                fecharModalReservaManual();
+                document.querySelector('form').reset();
+                alert("Reserva manual cadastrada!");
+            } catch(err) { alert("Erro ao criar reserva."); }
+        };
+    </script>
+</body>
+</html>

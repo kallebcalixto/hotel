@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel dos Sonhos Fazenda - Clube de Férias & Diárias</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .selo-destaque {
+            background: linear-gradient(135deg, rgba(28, 25, 23, 0.95), rgba(12, 10, 9, 0.98));
+            border: 2px dashed rgba(217, 119, 6, 0.6);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(217, 119, 6, 0.25);
+        }
+        /* LOGO DE FUNDO GRANDE NA TELA TODA */
+        .bg-watermark {
+            position: fixed;
+            inset: 0;
+            background-image: url('https://i.imgur.com/wx6l3ac.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: min(90vw, 950px) auto;
+            opacity: 0.10;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-stone-900 text-stone-100 min-h-screen flex flex-col justify-between relative">
+
+    <!-- FUNDO COM MARCA D'ÁGUA DA LOGO GRANDE -->
+    <div class="bg-watermark"></div>
+
+    <!-- HEADER COM LOGO BEM MAIOR E MAIS APARENTE (BOTÃO ADMIN REMOVIDO) -->
+    <header class="bg-stone-950 border-b border-stone-800 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-5">
+                <img src="https://i.imgur.com/wx6l3ac.png" alt="Logo" class="h-24 md:h-28 w-auto object-contain rounded-xl border-2 border-amber-500/50 shadow-2xl bg-stone-900 p-2 transition hover:scale-105">
+                <div>
+                    <h1 class="font-serif text-3xl md:text-4xl font-bold tracking-wide text-amber-400 drop-shadow">HOTEL DOS SONHOS FAZENDA</h1>
+                    <p class="text-xs text-stone-400 tracking-widest uppercase font-semibold">Clube de Férias & Diárias Avulsas</p>
+                </div>
+            </div>
+            <nav class="flex flex-wrap gap-2 justify-center">
+                <button onclick="switchTab('home')" id="btn-home" class="px-3.5 py-2 rounded-xl bg-amber-600 text-stone-950 font-semibold text-sm transition shadow"><i class="fa-solid fa-house mr-1"></i>Início</button>
+                <button onclick="switchTab('cadastro')" id="btn-cadastro" class="px-3.5 py-2 rounded-xl bg-stone-800 text-stone-200 font-semibold text-sm transition"><i class="fa-solid fa-user-plus mr-1"></i>Associe-se</button>
+                <button onclick="switchTab('carne')" id="btn-carne" class="px-3.5 py-2 rounded-xl bg-stone-800 text-stone-200 font-semibold text-sm transition"><i class="fa-solid fa-barcode mr-1"></i>Meu Carnê</button>
+                <button onclick="switchTab('reservas')" id="btn-reservas" class="px-3.5 py-2 rounded-xl bg-stone-800 text-stone-200 font-semibold text-sm transition"><i class="fa-solid fa-calendar-days mr-1"></i>Sócios (Reservas)</button>
+                <button onclick="switchTab('avulso')" id="btn-avulso" class="px-3.5 py-2 rounded-xl bg-stone-800 text-stone-200 font-semibold text-sm transition"><i class="fa-solid fa-bed mr-1"></i>Reserva Diária Avulsa</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-8 relative z-10">
+
+        <!-- SELOS DE PROMOÇÃO EM FORMATO DE COLUNA (VERTICAL E PULSANDO) -->
+        <div class="max-w-xl mx-auto space-y-4">
+            <!-- Selo Standard -->
+            <div id="banner-std-container" class="hidden">
+                <div onclick="switchTab('avulso')" class="cursor-pointer selo-destaque p-5 rounded-2xl relative overflow-hidden transition hover:scale-[1.02] group animate-pulse">
+                    <div class="absolute -right-4 -bottom-4 text-amber-500/10 text-7xl font-serif font-bold pointer-events-none group-hover:scale-110 transition"><i class="fa-solid fa-door-closed"></i></div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-amber-500 text-stone-950 p-3 rounded-xl text-xl shadow-lg shrink-0"><i class="fa-solid fa-tag"></i></div>
+                        <div class="space-y-1">
+                            <span class="bg-amber-500/20 text-amber-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-500/30 uppercase tracking-widest inline-block">⚡ Selo Oferta Standard</span>
+                            <h4 id="promo-std-titulo-site" class="font-serif text-lg font-bold text-white">Carregando...</h4>
+                            <p class="text-[11px] text-stone-400">Tarifa especial automática. <span class="text-amber-400 font-semibold underline">Clique para reservar &rarr;</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selo Suíte VIP -->
+            <div id="banner-suite-container" class="hidden">
+                <div onclick="switchTab('avulso')" class="cursor-pointer selo-destaque p-5 rounded-2xl relative overflow-hidden transition hover:scale-[1.02] group border-rose-500/40 animate-pulse">
+                    <div class="absolute -right-4 -bottom-4 text-rose-500/10 text-7xl font-serif font-bold pointer-events-none group-hover:scale-110 transition"><i class="fa-solid fa-fire"></i></div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-rose-600 text-white p-3 rounded-xl text-xl shadow-lg shrink-0"><i class="fa-solid fa-fire-flame-curved"></i></div>
+                        <div class="space-y-1">
+                            <span class="bg-rose-500/20 text-rose-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-rose-500/30 uppercase tracking-widest inline-block">🔥 Selo VIP Lareira & Cortesia</span>
+                            <h4 id="promo-suite-titulo-site" class="font-serif text-lg font-bold text-white">Carregando...</h4>
+                            <p class="text-[11px] text-stone-400">Luxo e cortesia exclusiva. <span class="text-rose-400 font-semibold underline">Clique para reservar &rarr;</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA: HOME -->
+        <section id="tab-home" class="space-y-12">
+            <div class="relative rounded-2xl overflow-hidden border border-stone-800 bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 p-8 md:p-12 shadow-2xl">
+                <div class="max-w-2xl space-y-6">
+                    <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-full border border-amber-500/20 uppercase tracking-widest">Nova Direção</span>
+                    <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight text-white">Viva momentos inesquecíveis na fazenda dos seus sonhos.</h2>
+                    <p class="text-stone-300 text-base leading-relaxed">Mais de 70 apartamentos climatizados e 6 suítes exclusivas com lareira. Torne-se sócio ou aproveite nossas promoções exclusivas!</p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('cadastro')" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-6 py-3 rounded-xl shadow-lg transition">Quero me Associar</button>
+                        <button onclick="switchTab('avulso')" class="bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold px-6 py-3 rounded-xl border border-stone-700 transition">Ver Calendário & Reservar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: CADASTRO COM RESUMO DO PLANO E CONTRATO -->
+        <section id="tab-cadastro" class="hidden max-w-2xl mx-auto space-y-6">
+            <div class="bg-stone-950 border border-stone-800 p-8 rounded-2xl shadow-xl space-y-6">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold text-white">Cadastro de Novo Sócio</h3>
+                    <p class="text-stone-400 text-sm">Preencha seus dados para gerar seu carnê digital com 12 mensalidades no Firebase.</p>
+                </div>
+                
+                <form id="form-cadastro" onsubmit="realizarCadastro(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">Nome Completo</label>
+                        <input type="text" id="cad-nome" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500" placeholder="Ex: Carlos Eduardo Silva">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">CPF (Chave Única)</label>
+                            <input type="text" id="cad-cpf" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500" placeholder="000.000.000-00">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">WhatsApp</label>
+                            <input type="text" id="cad-tel" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500" placeholder="(41) 99999-9999">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">E-mail</label>
+                        <input type="email" id="cad-email" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500" placeholder="email@exemplo.com">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">Escolha o Plano</label>
+                        <select id="cad-plano" onchange="atualizarAvisoPlano()" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500">
+                            <option value="padrao">Plano Padrão (Standard)</option>
+                            <option value="vip">Plano VIP (Suíte com Lareira)</option>
+                        </select>
+                    </div>
+
+                    <!-- BOX DE AVISO DINÂMICO COM VALOR E DIAS EXATOS -->
+                    <div id="box-aviso-plano" class="bg-amber-950/40 border border-amber-600/50 p-4 rounded-xl text-xs space-y-1.5 text-amber-200">
+                        <span class="font-extrabold uppercase tracking-widest block text-amber-400"><i class="fa-solid fa-circle-check mr-1"></i> Resumo Financeiro e Benefícios do Plano:</span>
+                        <p id="texto-aviso-detalhes" class="text-sm font-semibold text-white">Carregando detalhes do plano...</p>
+                    </div>
+
+                    <!-- CAIXA DE CONTRATO E TERMOS DE USO JURÍDICO -->
+                    <div class="bg-stone-900 border border-stone-800 p-4 rounded-xl space-y-3">
+                        <h4 class="font-bold text-xs uppercase text-amber-400 tracking-wider"><i class="fa-solid fa-file-shield mr-1"></i> Contrato de Adesão ao Clube de Férias & Termos de Uso</h4>
+                        <div class="text-[11px] text-stone-300 max-h-36 overflow-y-auto pr-2 space-y-2 border border-stone-800 p-3 rounded-lg bg-stone-950 leading-relaxed">
+                            <p><strong>CLÁUSULA 1ª - DO OBJETO E VIGÊNCIA:</strong> O presente instrumento tiene por objeto a adesão ao programa de tempo compartilhado (Clube de Férias) do <em>Hotel dos Sonhos Fazenda</em>, com vigência obrigatória de <strong>12 (doze) meses</strong> contados a partir da data de aprovação deste cadastro.</p>
+                            <p><strong>CLÁUSULA 2ª - DA RENOVAÇÃO AUTOMÁTICA:</strong> Visando assegurar a continuidade ininterrupta dos benefícios de hospedagem e tarifas preferenciais, este contrato renovar-se-á <strong>automaticamente por igual período (sucessivos ciclos de 12 meses)</strong>. Caso o associado não deseje a renovação, deverá notificar a administração por escrito com antecedência mínima de 30 (trinta) dias do término do ciclo vigente.</p>
+                            <p><strong>CLÁUSULA 3ª - DOS DIREITOS DE USO E CARÊNCIA:</strong> O associado adquire o direito de usufruir da quantidade de dias mensais estipulada no plano escolhido. O uso das dependências é condicionado à adimplência financeira, sendo obrigatório o cumprimento da carência de 3 (três) mensalidades quitadas para a emissão de reservas.</p>
+                            <p><strong>CLÁUSULA 4ª - DA PROTEÇÃO E TRANSPARÊNCIA (CDC):</strong> As partes declaram estar cientes de que os direitos e obrigações aqui pactuados garantem o equilíbrio contratual, a segurança patrimonial da empresa administradora e o pleno gozo de lazer ao associado, em conformidade com as normas de proteção ao consumidor.</p>
+                        </div>
+                        <div class="flex items-start gap-2 pt-1">
+                            <input type="checkbox" id="aceite-termos" required class="mt-0.5 accent-amber-500 w-4 h-4 cursor-pointer">
+                            <label for="aceite-termos" class="text-xs text-stone-200 cursor-pointer font-medium">Declaro que li, compreendi e aceito integralmente os termos deste contrato, a vigência de 12 meses, a cláusula de renovação automática e as condições de uso do plano.</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold py-3.5 rounded-xl transition shadow-lg mt-4">Concluir Cadastro & Gerar Carnê</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ABA: CARNÊ -->
+        <section id="tab-carne" class="hidden max-w-3xl mx-auto space-y-6">
+            <div class="bg-stone-950 border border-stone-800 p-8 rounded-2xl shadow-xl space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold text-white">Consulta de Carnê Digital</h3>
+                        <p class="text-stone-400 text-sm">Digite seu CPF cadastrado para ver boletos e status de carência.</p>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <input type="text" id="busca-cpf" placeholder="000.000.000-00" class="bg-stone-900 border border-stone-800 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-amber-500">
+                        <button onclick="consultarCarne()" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-4 py-2 rounded-xl text-sm transition">Buscar</button>
+                    </div>
+                </div>
+
+                <div id="resultado-carne" class="hidden space-y-6 pt-4 border-t border-stone-800">
+                    <div class="bg-stone-900 p-4 rounded-xl border border-stone-800 flex flex-col md:flex-row justify-between gap-4">
+                        <div><span class="text-xs text-stone-400 block">Titular</span><strong id="perfil-nome" class="text-white text-lg">-</strong></div>
+                        <div><span class="text-xs text-stone-400 block">Plano</span><span id="perfil-plano" class="text-amber-400 font-semibold">-</span></div>
+                        <div><span class="text-xs text-stone-400 block">Carência (3 Pagamentos)</span><span id="perfil-carencia" class="px-3 py-1 rounded-full text-xs font-bold inline-block mt-1">-</span></div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white mb-3"><i class="fa-solid fa-barcode mr-2 text-amber-500"></i>Carnê Digital (12 Meses)</h4>
+                        <div id="lista-boletos" class="space-y-3 max-h-96 overflow-y-auto pr-2"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: RESERVAS DE SÓCIOS -->
+        <section id="tab-reservas" class="hidden space-y-8">
+            <div class="bg-stone-950 border border-stone-800 p-8 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="space-y-2">
+                    <h3 class="font-serif text-3xl font-bold text-white">Motor de Reservas (Sócios)</h3>
+                    <p class="text-xs text-stone-400 max-w-xl" id="texto-regra-carencia">Requisito obrigatório: mínimo de 3 mensalidades quitadas e respeitando o limite mensal do plano.</p>
+                </div>
+                <button onclick="abrirModalReserva()" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-6 py-3.5 rounded-xl transition shadow-lg whitespace-nowrap"><i class="fa-solid fa-plus mr-2"></i>Nova Reserva Sócio</button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex justify-between items-center"><h4 class="font-bold text-white text-lg">Unidades (6 Suítes c/ Lareira + 70 Apts)</h4></div>
+                <div id="grid-apartamentos" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3"></div>
+            </div>
+        </section>
+
+        <!-- ABA: RESERVA AVULSA -->
+        <section id="tab-avulso" class="hidden max-w-4xl mx-auto space-y-6">
+            <div class="bg-stone-950 border border-stone-800 p-8 rounded-2xl shadow-xl space-y-6">
+                <div>
+                    <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-500/20 uppercase tracking-widest">Orçamento Dinâmico & Promoções</span>
+                    <h3 class="font-serif text-2xl font-bold text-white mt-3">Disponibilidade e Orçamento de Diária Avulsa</h3>
+                    <p class="text-stone-400 text-sm">Selecione o quarto abaixo e o sistema aplicará a promoção correspondente automaticamente.</p>
+                </div>
+
+                <div class="bg-stone-900 border border-stone-800 p-5 rounded-xl space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">Escolher Unidade para Ver o Calendário</label>
+                            <select id="cal-unidade-filtro" onchange="atualizarCalendarioVisual()" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-stone-300 mb-1">Mês de Referência</label>
+                            <input type="month" id="cal-mes-filtro" onchange="atualizarCalendarioVisual()" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 text-xs pt-2 border-t border-stone-800">
+                        <span class="flex items-center gap-1.5 text-emerald-400"><i class="fa-solid fa-circle text-[10px]"></i> Disponível</span>
+                        <span class="flex items-center gap-1.5 text-rose-400"><i class="fa-solid fa-circle text-[10px]"></i> Ocupado</span>
+                    </div>
+
+                    <div id="calendario-grade" class="grid grid-cols-7 gap-2 pt-2 text-center"></div>
+                </div>
+
+                <form onsubmit="realizarReservaAvulsoFirebase(event)" class="space-y-4 pt-2 border-t border-stone-800">
+                    <h4 class="font-bold text-white text-base">Solicitar Reserva & Orçamento</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Seu Nome Completo</label><input type="text" id="av-nome" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white" placeholder="Juliana Mendes"></div>
+                        <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">WhatsApp</label><input type="text" id="av-tel" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white" placeholder="(41) 99999-9999"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Unidade Desejada</label><select id="av-unidade" onchange="calcularOrcamento()" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white"></select></div>
+                        <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Check-in</label><input type="date" id="av-checkin" onchange="calcularOrcamento()" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white"></div>
+                        <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Check-out</label><input type="date" id="av-checkout" onchange="calcularOrcamento()" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white"></div>
+                    </div>
+
+                    <div id="box-orcamento" class="hidden bg-amber-950/40 border border-amber-600/40 p-4 rounded-xl flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+                        <div>
+                            <span id="texto-aviso-promo" class="text-xs text-amber-400 uppercase font-bold tracking-wider block">Orçamento Automático</span>
+                            <span id="texto-qtde-diarias" class="text-white font-medium">-</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-stone-400 block">Valor Estimado Total</span>
+                            <span id="texto-valor-total" class="text-2xl font-extrabold text-amber-400">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> Reservar e Continuar no WhatsApp</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL SÓCIO -->
+    <div id="modal-reserva" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-stone-900 border border-stone-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-6">
+            <div class="flex justify-between items-center"><h3 class="font-serif text-xl font-bold text-white">Solicitar Reserva (Sócio)</h3><button onclick="fecharModalReserva()" class="text-stone-400"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+            <form onsubmit="criarReservaSocio(event)" class="space-y-4">
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Seu CPF</label><input type="text" id="res-cpf" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="000.000.000-00"></div>
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Unidade</label><select id="res-unidade" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white"></select></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Check-in</label><input type="date" id="res-checkin" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white"></div>
+                    <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Check-out</label><input type="date" id="res-checkout" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white"></div>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold py-3 rounded-xl transition">Confirmar Reserva de Sócio</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FIREBASE INDEX -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, set, get, update, child, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpNd_FpemL3UkI2wmW_LTJBCFtAwk04YU",
+            authDomain: "hotel-3024e.firebaseapp.com",
+            databaseURL: "https://hotel-3024e-default-rtdb.firebaseio.com",
+            projectId: "hotel-3024e",
+            storageBucket: "hotel-3024e.firebasestorage.app",
+            messagingSenderId: "650878540892",
+            appId: "1:650878540892:web:d0522d32cb320df2531a99",
+            measurementId: "G-XN5GE8H756"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        const WHATSAPP_HOTEL = "5541996278447";
+        let cachePlanos = { padrao: { valor: 199.90, limiteDias: 5 }, vip: { valor: 299.90, limiteDias: 10 } };
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            onValue(ref(db, 'configuracoes/planos'), (snapshot) => {
+                if(snapshot.exists()) {
+                    cachePlanos = snapshot.val();
+                }
+                atualizarAvisoPlano();
+            });
+
+            try {
+                const snapStd = await get(child(ref(db), 'configuracoes/promo_standard'));
+                if(snapStd.exists() && snapStd.val().ativa) {
+                    document.getElementById('promo-std-titulo-site').innerText = snapStd.val().titulo;
+                    document.getElementById('banner-std-container').classList.remove('hidden');
+                }
+                const snapSuite = await get(child(ref(db), 'configuracoes/promo_suite'));
+                if(snapSuite.exists() && snapSuite.val().ativa) {
+                    document.getElementById('promo-suite-titulo-site').innerText = snapSuite.val().titulo;
+                    document.getElementById('banner-suite-container').classList.remove('hidden');
+                }
+            } catch(err) { console.error(err); }
+        });
+
+        window.atualizarAvisoPlano = function() {
+            const planoEscolhido = document.getElementById('cad-plano').value;
+            const pInfo = cachePlanos[planoEscolhido] || (planoEscolhido === 'vip' ? { valor: 299.90, limiteDias: 10 } : { valor: 199.90, limiteDias: 5 });
+            
+            const texto = document.getElementById('texto-aviso-detalhes');
+            texto.innerHTML = `Mensalidade: <strong>R$ ${Number(pInfo.valor).toFixed(2)}</strong> | Direito de uso: <strong>${pInfo.limiteDias} dias por mês</strong> | Vigência do Contrato: <strong>12 meses (Renovação automática)</strong>`;
+        };
+
+        window.switchTab = function(tabId) {
+            ['home', 'cadastro', 'carne', 'reservas', 'avulso'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`btn-${t}`);
+                if(btn) btn.className = "px-3.5 py-2 rounded-xl bg-stone-800 text-stone-200 font-semibold text-sm transition";
+            });
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) activeBtn.className = "px-3.5 py-2 rounded-xl bg-amber-600 text-stone-950 font-semibold text-sm transition";
+            
+            if(tabId === 'reservas') carregarGridApartamentos();
+            if(tabId === 'avulso') inicializarPainelAvulso();
+        };
+
+        window.realizarCadastro = async function(e) {
+            e.preventDefault();
+            const aceite = document.getElementById('aceite-termos').checked;
+            if(!aceite) { alert("Você precisa ler e aceitar os termos do contrato de associação para prosseguir."); return; }
+
+            const nome = document.getElementById('cad-nome').value;
+            const cpfRaw = document.getElementById('cad-cpf').value;
+            const cpfKey = cpfRaw.replace(/\D/g, '');
+            const tel = document.getElementById('cad-tel').value;
+            const email = document.getElementById('cad-email').value;
+            const plano = document.getElementById('cad-plano').value;
+
+            try {
+                const snapshot = await get(child(ref(db), `socios/${cpfKey}`));
+                if (snapshot.exists()) { alert("Este CPF já está cadastrado!"); return; }
+
+                await set(ref(db, `socios/${cpfKey}`), { 
+                    nome, 
+                    cpf: cpfRaw, 
+                    tel, 
+                    email, 
+                    plano, 
+                    parcelasPagas: 0, 
+                    dataAssoc: new Date().toISOString() 
+                });
+
+                alert("Cadastro realizado com sucesso! Contrato de 12 meses aceito e carnê digital gerado com base na data exata de hoje.");
+                document.getElementById('form-cadastro').reset();
+                document.getElementById('busca-cpf').value = cpfRaw;
+                switchTab('carne');
+                consultarCarne();
+            } catch (error) { alert("Erro ao cadastrar: " + error.message); }
+        };
+
+        window.consultarCarne = async function() {
+            const cpfRaw = document.getElementById('busca-cpf').value.trim();
+            const cpfKey = cpfRaw.replace(/\D/g, '');
+            const container = document.getElementById('resultado-carne');
+
+            if(!cpfKey) { alert("Digite um CPF válido."); return; }
+
+            try {
+                const snapshot = await get(child(ref(db), `socios/${cpfKey}`));
+                if (!snapshot.exists()) { alert("Sócio não encontrado."); container.classList.add('hidden'); return; }
+
+                const socio = snapshot.val();
+                container.classList.remove('hidden');
+                document.getElementById('perfil-nome').innerText = socio.nome;
+                
+                const pInfo = cachePlanos[socio.plano] || (socio.plano === 'vip' ? { valor: 299.90, limiteDias: 10 } : { valor: 199.90, limiteDias: 5 });
+                document.getElementById('perfil-plano').innerText = socio.plano === 'vip' ? `Suíte VIP com Lareira (R$ ${pInfo.valor.toFixed(2)}/mês - ${pInfo.limiteDias} dias/mês)` : `Apartamento Standard (R$ ${pInfo.valor.toFixed(2)}/mês - ${pInfo.limiteDias} dias/mês)`;
+                
+                const pagas = socio.parcelasPagas || 0;
+                const carenciaBadge = document.getElementById('perfil-carencia');
+                if(pagas >= 3) {
+                    carenciaBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                    carenciaBadge.innerText = `Liberado (${pagas}/3 pagas)`;
+                } else {
+                    carenciaBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse";
+                    carenciaBadge.innerText = `⚠️ Inadimplente / Carência (${pagas}/3 pagas)`;
+                }
+
+                const listaBoletos = document.getElementById('lista-boletos');
+                listaBoletos.innerHTML = '';
+                const valorMensalidade = `R$ ${pInfo.valor.toFixed(2)}`;
+
+                let dataBaseVencimento = socio.dataAssoc ? new Date(socio.dataAssoc) : new Date();
+
+                for(let i = 1; i <= 12; i++) {
+                    const paga = i <= pagas;
+                    
+                    let dataVenc = new Date(dataBaseVencimento);
+                    dataVenc.setMonth(dataVenc.getMonth() + (i - 1));
+                    
+                    const diaFmt = String(dataVenc.getDate()).padStart(2, '0');
+                    const mesFmt = String(dataVenc.getMonth() + 1).padStart(2, '0');
+                    const anoFmt = dataVenc.getFullYear();
+                    const dataFormatadaStr = `${diaFmt}/${mesFmt}/${anoFmt}`;
+
+                    const div = document.createElement('div');
+                    div.className = `p-4 rounded-xl border flex flex-col md:flex-row justify-between items-center gap-4 ${paga ? 'bg-stone-900/40 border-emerald-500/30' : 'bg-stone-900 border-stone-800'}`;
+                    
+                    div.innerHTML = `
+                        <div>
+                            <span class="text-xs font-bold text-amber-500 uppercase">Parcela ${i} / 12 (Contrato Anual)</span>
+                            <h5 class="font-bold text-white">${valorMensalidade} - Vencimento: ${dataFormatadaStr}</h5>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            ${paga 
+                                ? '<span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400"><i class="fa-solid fa-check mr-1"></i> Pago</span>' 
+                                : `<button onclick="pagarBoleto(${i}, '${valorMensalidade}', '${dataFormatadaStr}')" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-4 py-2 rounded-xl text-xs transition shadow flex items-center gap-1.5 cursor-pointer"><i class="fa-solid fa-barcode"></i> Pagar / Copiar Pix</button>`
+                            }
+                        </div>
+                    `;
+                    listaBoletos.appendChild(div);
+                }
+            } catch (error) { console.error(error); }
+        };
+
+        window.pagarBoleto = function(numParcela, valor, dataVenc) {
+            const msg = `Olá! Gostaria de realizar o pagamento da Parcela ${numParcela}/12 (Vencimento: ${dataVenc} - ${valor}) do meu plano no Hotel dos Sonhos Fazenda. Poderia me enviar o código Pix ou boleto?`;
+            window.open(`https://wa.me/${WHATSAPP_HOTEL}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.carregarGridApartamentos = async function() {
+            try {
+                const snapRes = await get(child(ref(db), 'reservas'));
+                const reservas = snapRes.exists() ? snapRes.val() : {};
+                
+                const grid = document.getElementById('grid-apartamentos');
+                grid.innerHTML = '';
+                const select = document.getElementById('res-unidade');
+                select.innerHTML = '';
+
+                for(let i = 1; i <= 76; i++) {
+                    const isSuite = i <= 6;
+                    const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-6}`;
+                    
+                    const opt = document.createElement('option');
+                    opt.value = nomeUnidade;
+                    opt.textContent = nomeUnidade;
+                    select.appendChild(opt);
+
+                    const reservada = Object.values(reservas).some(r => r.unidade === nomeUnidade && r.status === 'Confirmada');
+                    const card = document.createElement('div');
+                    card.className = `p-3 rounded-xl border text-center flex flex-col justify-between items-center transition ${reservada ? 'bg-rose-950/20 border-rose-900/40' : 'bg-stone-900 border-stone-800'}`;
+                    card.innerHTML = `
+                        <div class="text-amber-500 text-lg mb-1"><i class="fa-solid ${isSuite ? 'fa-fire' : 'fa-door-closed'}"></i></div>
+                        <span class="text-xs font-bold text-white">${nomeUnidade}</span>
+                        <span class="text-[10px] mt-2 px-2 py-0.5 rounded ${reservada ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}">${reservada ? 'Ocupado' : 'Disponível'}</span>
+                    `;
+                    grid.appendChild(card);
+                }
+            } catch(err) { console.error(err); }
+        };
+
+        window.inicializarPainelAvulso = async function() {
+            try {
+                const selectFiltro = document.getElementById('cal-unidade-filtro');
+                const selectForm = document.getElementById('av-unidade');
+                const mesFiltro = document.getElementById('cal-mes-filtro');
+
+                selectFiltro.innerHTML = '';
+                selectForm.innerHTML = '';
+
+                if(!mesFiltro.value) {
+                    const hoje = new Date();
+                    mesFiltro.value = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
+                }
+
+                for(let i = 1; i <= 76; i++) {
+                    const isSuite = i <= 6;
+                    const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-6}`;
+                    selectFiltro.appendChild(new Option(nomeUnidade, nomeUnidade));
+                    selectForm.appendChild(new Option(nomeUnidade, nomeUnidade));
+                }
+                atualizarCalendarioVisual();
+                calcularOrcamento();
+            } catch(err) { console.error(err); }
+        };
+
+        window.atualizarCalendarioVisual = async function() {
+            const unidadeEscolhida = document.getElementById('cal-unidade-filtro').value;
+            const valorMes = document.getElementById('cal-mes-filtro').value;
+            const grade = document.getElementById('calendario-grade');
+            grade.innerHTML = '';
+
+            if(!unidadeEscolhida || !valorMes) return;
+
+            const [anoStr, mesStr] = valorMes.split('-');
+            const ano = parseInt(anoStr);
+            const mes = parseInt(mesStr) - 1;
+
+            const snapRes = await get(child(ref(db), 'reservas'));
+            const reservas = snapRes.exists() ? snapRes.val() : {};
+
+            const diasOcupados = new Set();
+            Object.values(reservas).forEach(r => {
+                if(r.unidade === unidadeEscolhida && (r.status === 'Confirmada' || r.status === 'Pendente')) {
+                    const dInicio = new Date(r.checkin + 'T00:00:00');
+                    const dFim = new Date(r.checkout + 'T00:00:00');
+                    let curr = new Date(dInicio);
+                    while(curr <= dFim) {
+                        if(curr.getFullYear() === ano && curr.getMonth() === mes) diasOcupados.add(curr.getDate());
+                        curr.setDate(curr.getDate() + 1);
+                    }
+                }
+            });
+
+            ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].forEach(d => {
+                grade.appendChild(Object.assign(document.createElement('div'), {className: "text-xs font-bold text-stone-400 py-1", innerText: d}));
+            });
+
+            const primeiroDia = new Date(ano, mes, 1).getDay();
+            const ultimoDia = new Date(ano, mes + 1, 0).getDate();
+
+            for(let i = 0; i < primeiroDia; i++) grade.appendChild(document.createElement('div'));
+
+            for(let dia = 1; dia <= ultimoDia; dia++) {
+                const ocupado = diasOcupados.has(dia);
+                const celula = document.createElement('div');
+                celula.className = `p-2 rounded-lg text-xs font-bold border flex flex-col items-center justify-center transition ${ocupado ? 'bg-rose-950/40 border-rose-900/50 text-rose-400 line-through' : 'bg-emerald-950/30 border-emerald-900/40 text-emerald-400'}`;
+                celula.innerHTML = `<span>${dia}</span><span class="text-[9px] mt-0.5 font-normal">${ocupado ? 'Ocupado' : 'Livre'}</span>`;
+                grade.appendChild(celula);
+            }
+        };
+
+        window.calcularOrcamento = async function() {
+            const checkin = document.getElementById('av-checkin').value;
+            const checkout = document.getElementById('av-checkout').value;
+            const unidade = document.getElementById('av-unidade').value;
+            const box = document.getElementById('box-orcamento');
+            
+            if(!checkin || !checkout || !unidade) { box.classList.add('hidden'); return; }
+
+            const diffDays = Math.ceil((new Date(checkout + 'T00:00:00') - new Date(checkin + 'T00:00:00')) / (1000 * 60 * 60 * 24));
+            if(diffDays <= 0) { box.classList.add('hidden'); return; }
+
+            const isSuite = unidade.toLowerCase().includes('suíte');
+            let preco = 250.00;
+            let promoNome = "";
+
+            try {
+                if(isSuite) {
+                    const pr = await get(child(ref(db), 'configuracoes/promo_suite'));
+                    if(pr.exists() && pr.val().ativa) { preco = parseFloat(pr.val().valor); promoNome = pr.val().titulo; }
+                    else {
+                        const base = await get(child(ref(db), 'configuracoes/precos'));
+                        if(base.exists()) preco = base.val().suite || 400.00;
+                    }
+                } else {
+                    const pr = await get(child(ref(db), 'configuracoes/promo_standard'));
+                    if(pr.exists() && pr.val().ativa) { preco = parseFloat(pr.val().valor); promoNome = pr.val().titulo; }
+                    else {
+                        const base = await get(child(ref(db), 'configuracoes/precos'));
+                        if(base.exists()) preco = base.val().standard || 250.00;
+                    }
+                }
+            } catch(err) {}
+
+            const total = diffDays * preco;
+            document.getElementById('texto-aviso-promo').innerHTML = promoNome ? `<span class="text-amber-400 font-bold">🔥 Selo Ativo: ${promoNome}</span>` : 'Orçamento Padrão';
+            document.getElementById('texto-qtde-diarias').innerText = `${diffDays} diária(s) em ${unidade} (R$ ${preco.toFixed(2)}/dia)`;
+            document.getElementById('texto-valor-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minFractionDigits: 2})}`;
+            box.classList.remove('hidden');
+        };
+
+        window.abrirModalReserva = () => document.getElementById('modal-reserva').classList.remove('hidden');
+        window.fecharModalReserva = () => document.getElementById('modal-reserva').classList.add('hidden');
+
+        window.criarReservaSocio = async function(e) {
+            e.preventDefault();
+            const cpfKey = document.getElementById('res-cpf').value.replace(/\D/g, '');
+            const unidade = document.getElementById('res-unidade').value;
+            const checkin = document.getElementById('res-checkin').value;
+            const checkout = document.getElementById('res-checkout').value;
+
+            const diffDays = Math.ceil((new Date(checkout + 'T00:00:00') - new Date(checkin + 'T00:00:00')) / (1000 * 60 * 60 * 24));
+            if(diffDays <= 0) { alert("Data de check-out inválida."); return; }
+
+            try {
+                const snapSocio = await get(child(ref(db), `socios/${cpfKey}`));
+                if(!snapSocio.exists()) { alert("CPF não encontrado!"); return; }
+                const socio = snapSocio.val();
+                const pagas = socio.parcelasPagas || 0;
+
+                if(pagas < 3) {
+                    alert(`❌ RESERVA BLOQUEADA!\n\nOlá ${socio.nome}, você possui apenas ${pagas}/3 mensalidades quitadas.\nO sistema exige carência de 3 pagamentos em dia.`);
+                    return;
+                }
+
+                const planoTipo = socio.plano || 'padrao';
+                const limiteConfig = cachePlanos[planoTipo] ? cachePlanos[planoTipo].limiteDias : (planoTipo === 'vip' ? 10 : 5);
+
+                const snapRes = await get(child(ref(db), 'reservas'));
+                const reservas = snapRes.exists() ? snapRes.val() : {};
+                
+                let diasJaReservadosNoMes = 0;
+                const mesCheckin = checkin.substring(0, 7);
+
+                Object.values(reservas).forEach(r => {
+                    if(r.contato === socio.tel && r.status === 'Confirmada' && r.checkin && r.checkin.startsWith(mesCheckin)) {
+                        const d1 = new Date(r.checkin + 'T00:00:00');
+                        const d2 = new Date(r.checkout + 'T00:00:00');
+                        const d = Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24));
+                        diasJaReservadosNoMes += d;
+                    }
+                });
+
+                if((diasJaReservadosNoMes + diffDays) > limiteConfig) {
+                    alert(`❌ LIMITE DE DIAS EXCEDIDO!\n\nSeu plano (${planoTipo.toUpperCase()}) permite até ${limiteConfig} dias de reserva por mês.\nVocê já utilizou ${diasJaReservadosNoMes} dias neste mês e está tentando solicitar mais ${diffDays} dias.`);
+                    return;
+                }
+
+                const dInicio = new Date(checkin);
+                const dFim = new Date(checkout);
+
+                for (let r of Object.values(reservas)) {
+                    if (r.unidade === unidade && (r.status === 'Confirmada' || r.status === 'Pendente')) {
+                        if (dInicio <= new Date(r.checkout) && dFim >= new Date(r.checkin)) {
+                            alert(`Conflito de datas! A unidade ${unidade} já está ocupada neste período.`);
+                            return;
+                        }
+                    }
+                }
+
+                await set(push(ref(db, 'reservas')), { unidade, tipo: `Sócio (${planoTipo.toUpperCase()})`, nome: socio.nome, contato: socio.tel, checkin, checkout, status: 'Confirmada' });
+                fecharModalReserva();
+                carregarGridApartamentos();
+                alert("Reserva de sócio confirmada com sucesso!");
+            } catch(err) { alert("Erro: " + err.message); }
+        };
+
+        window.realizarReservaAvulsoFirebase = async function(e) {
+            e.preventDefault();
+            const nome = document.getElementById('av-nome').value;
+            const tel = document.getElementById('av-tel').value;
+            const unidade = document.getElementById('av-unidade').value;
+            const checkin = document.getElementById('av-checkin').value;
+            const checkout = document.getElementById('av-checkout').value;
+
+            const diffDays = Math.ceil((new Date(checkout + 'T00:00:00') - new Date(checkin + 'T00:00:00')) / (1000 * 60 * 60 * 24));
+            if(diffDays <= 0) { alert("Data de check-out inválida."); return; }
+
+            let preco = 250.00;
+            let promoNome = "";
+            const isSuite = unidade.toLowerCase().includes('suíte');
+
+            try {
+                if(isSuite) {
+                    const pr = await get(child(ref(db), 'configuracoes/promo_suite'));
+                    if(pr.exists() && pr.val().ativa) { preco = parseFloat(pr.val().valor); promoNome = pr.val().titulo; }
+                    else {
+                        const base = await get(child(ref(db), 'configuracoes/precos'));
+                        if(base.exists()) preco = base.val().suite || 400.00;
+                    }
+                } else {
+                    const pr = await get(child(ref(db), 'configuracoes/promo_standard'));
+                    if(pr.exists() && pr.val().ativa) { preco = parseFloat(pr.val().valor); promoNome = pr.val().titulo; }
+                    else {
+                        const base = await get(child(ref(db), 'configuracoes/precos'));
+                        if(base.exists()) preco = base.val().standard || 250.00;
+                    }
+                }
+            } catch(err) {}
+
+            const total = diffDays * preco;
+
+            await set(push(ref(db, 'reservas')), {
+                unidade,
+                tipo: promoNome ? `Selo: ${promoNome}` : 'Avulso',
+                nome,
+                contato: tel,
+                checkin,
+                checkout,
+                diarias: diffDays,
+                valorTotal: total,
+                status: 'Pendente'
+            });
+
+            const msg = `Olá! Solicitei reserva avulsa no Hotel dos Sonhos Fazenda.%0A*Hóspede:* ${nome}%0A*Unidade:* ${unidade}%0A*Check-in:* ${checkin}%0A*Check-out:* ${checkout}%0A*Total:* R$ ${total.toLocaleString('pt-BR', {minFractionDigits: 2})}`;
+            window.open(`https://wa.me/${WHATSAPP_HOTEL}?text=${msg}`, '_blank');
+            alert("Reserva enviada! Redirecionando para o WhatsApp...");
+            document.querySelector('form').reset();
+            document.getElementById('box-orcamento').classList.add('hidden');
+            switchTab('home');
+        };
+    </script>
+</body>
+</html>
