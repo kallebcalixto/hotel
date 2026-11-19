@@ -40,7 +40,7 @@
                 <img src="https://i.imgur.com/wx6l3ac.png" alt="Logo" class="h-12 w-auto object-contain rounded bg-stone-950 p-1">
                 <div>
                     <h2 class="font-serif text-2xl font-bold text-amber-500">Painel Administrativo - Nova Gestão</h2>
-                    <p class="text-xs text-stone-400">Controle de Valores, Planos, Limites de Dias, WhatsApps e Reservas</p>
+                    <p class="text-xs text-stone-400">Controle de Valores, Planos, Limites de Dias, WhatsApps, Reservas & Eventos</p>
                 </div>
             </div>
             <div class="flex gap-3">
@@ -65,7 +65,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                 <div class="bg-stone-950 border border-stone-800 p-5 rounded-xl space-y-3">
-                    <h4 class="font-bold text-emerald-400 text-base"><i class="fa-solid fa-bed mr-1"></i> WhatsApp - Clientes Avulsos</h4>
+                    <h4 class="font-bold text-emerald-400 text-base"><i class="fa-solid fa-bed mr-1"></i> WhatsApp - Clientes Avulsos & Eventos</h4>
                     <div>
                         <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Número (com DDD e DDI)</label>
                         <input type="text" id="whats-avulso" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="Ex: 5541996278447">
@@ -160,6 +160,10 @@
                         <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Valor Promocional da Diária (R$)</label>
                         <input type="number" step="0.01" id="promo-std-valor" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="199.90">
                     </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-amber-400 mb-1">Mínimo de Diárias para Ativar a Promoção</label>
+                        <input type="number" min="1" id="promo-std-mindias" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="Ex: 3">
+                    </div>
                     <button onclick="salvarPromoStandard()" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-2.5 rounded-xl text-sm transition"><i class="fa-solid fa-bullhorn mr-1"></i> Publicar Promo Standard</button>
                 </div>
             </div>
@@ -179,6 +183,10 @@
                     <div>
                         <label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Valor Promocional da Suíte (R$)</label>
                         <input type="number" step="0.01" id="promo-suite-valor" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="320.00">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-amber-400 mb-1">Mínimo de Diárias para Ativar a Promoção</label>
+                        <input type="number" min="1" id="promo-suite-mindias" class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white text-sm" placeholder="Ex: 3">
                     </div>
                     <button onclick="salvarPromoSuite()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-sm transition"><i class="fa-solid fa-bullhorn mr-1"></i> Publicar Promo Suíte</button>
                 </div>
@@ -200,6 +208,26 @@
                         <tr><th class="p-3">Unidade</th><th class="p-3">Tipo</th><th class="p-3">Cliente / Hóspede</th><th class="p-3">Contato WhatsApp</th><th class="p-3">Check-in / Out</th><th class="p-3">Status</th><th class="p-3">Ações da Gestão</th></tr>
                     </thead>
                     <tbody id="tabela-adm-reservas" class="divide-y divide-stone-800"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SEÇÃO: CONTROLE DE EVENTOS CORPORATIVOS (AUDITÓRIO) -->
+        <div class="bg-stone-900 border border-amber-600/30 p-6 rounded-2xl shadow-xl space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded border border-amber-500/20 uppercase">Auditório Empresarial</span>
+                    <h3 class="font-serif text-xl font-bold text-white mt-2"><i class="fa-solid fa-briefcase text-amber-500 mr-2"></i>Controle de Eventos Corporativos</h3>
+                    <p class="text-xs text-stone-400 mt-1">Aprovação de agendamentos do auditório com data, horário, empresa e contato no WhatsApp.</p>
+                </div>
+                <button onclick="abrirModalEventoManual()" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-4 py-2 rounded-xl text-sm transition whitespace-nowrap"><i class="fa-solid fa-plus mr-2"></i>Agendar Evento Manual</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-stone-300">
+                    <thead class="bg-stone-950 text-stone-400 uppercase text-xs">
+                        <tr><th class="p-3">Evento</th><th class="p-3">Responsável / Empresa</th><th class="p-3">Contato WhatsApp</th><th class="p-3">Data & Horário</th><th class="p-3">Observações</th><th class="p-3">Status</th><th class="p-3">Ações</th></tr>
+                    </thead>
+                    <tbody id="tabela-adm-eventos" class="divide-y divide-stone-800"></tbody>
                 </table>
             </div>
         </div>
@@ -229,7 +257,7 @@
         </div>
     </div>
 
-    <!-- MODAL MANUAL -->
+    <!-- MODAL MANUAL RESERVA -->
     <div id="modal-reserva-manual" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-stone-900 border border-stone-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-6">
             <div class="flex justify-between items-center"><h3 class="font-serif text-xl font-bold text-white">Criar Reserva Manual</h3><button onclick="fecharModalReservaManual()" class="text-stone-400"><i class="fa-solid fa-xmark text-xl"></i></button></div>
@@ -242,6 +270,24 @@
                     <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Check-out</label><input type="date" id="man-checkout" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white"></div>
                 </div>
                 <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold py-3 rounded-xl transition">Salvar Reserva</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL MANUAL EVENTO CORPORATIVO -->
+    <div id="modal-evento-manual" class="fixed inset-0 bg-stone-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-stone-900 border border-stone-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-6">
+            <div class="flex justify-between items-center"><h3 class="font-serif text-xl font-bold text-white">Agendar Evento Manual (Auditório)</h3><button onclick="fecharModalEventoManual()" class="text-stone-400"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+            <form onsubmit="criarEventoManualAdmin(event)" class="space-y-4">
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Responsável / Empresa</label><input type="text" id="mev-nome" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="Empresa XYZ"></div>
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">WhatsApp</label><input type="text" id="mev-tel" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="(41) 99999-9999"></div>
+                <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Tipo de Evento</label><input type="text" id="mev-tipo" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2.5 text-white" placeholder="Convenção / Treinamento"></div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Data</label><input type="date" id="mev-data" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                    <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Início</label><input type="time" id="mev-inicio" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                    <div><label class="block text-xs font-semibold uppercase text-stone-300 mb-1">Fim</label><input type="time" id="mev-fim" required class="w-full bg-stone-950 border border-stone-800 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold py-3 rounded-xl transition">Salvar Evento</button>
             </form>
         </div>
     </div>
@@ -312,16 +358,18 @@
             });
 
             onValue(ref(db, 'configuracoes/promo_standard'), (snapshot) => {
-                if(snapshot.exists() && document.activeElement !== document.getElementById('promo-std-titulo')) {
-                    document.getElementById('promo-std-titulo').value = snapshot.val().titulo || '';
-                    document.getElementById('promo-std-valor').value = snapshot.val().valor || '';
+                if(snapshot.exists()) {
+                    if(document.activeElement !== document.getElementById('promo-std-titulo')) document.getElementById('promo-std-titulo').value = snapshot.val().titulo || '';
+                    if(document.activeElement !== document.getElementById('promo-std-valor')) document.getElementById('promo-std-valor').value = snapshot.val().valor || '';
+                    if(document.activeElement !== document.getElementById('promo-std-mindias')) document.getElementById('promo-std-mindias').value = snapshot.val().minDias || 1;
                 }
             });
 
             onValue(ref(db, 'configuracoes/promo_suite'), (snapshot) => {
-                if(snapshot.exists() && document.activeElement !== document.getElementById('promo-suite-titulo')) {
-                    document.getElementById('promo-suite-titulo').value = snapshot.val().titulo || '';
-                    document.getElementById('promo-suite-valor').value = snapshot.val().valor || '';
+                if(snapshot.exists()) {
+                    if(document.activeElement !== document.getElementById('promo-suite-titulo')) document.getElementById('promo-suite-titulo').value = snapshot.val().titulo || '';
+                    if(document.activeElement !== document.getElementById('promo-suite-valor')) document.getElementById('promo-suite-valor').value = snapshot.val().valor || '';
+                    if(document.activeElement !== document.getElementById('promo-suite-mindias')) document.getElementById('promo-suite-mindias').value = snapshot.val().minDias || 1;
                 }
             });
 
@@ -350,7 +398,7 @@
                             <td class="p-3 font-bold text-white">${r.unidade}</td>
                             <td class="p-3"><span class="bg-stone-800 text-amber-400 px-2 py-0.5 rounded text-xs">${r.tipo || 'Sócio'}</span></td>
                             <td class="p-3 font-semibold">${r.nome}</td>
-                            <td class="p-3 text-amber-400"><a href="https://wa.me/55${r.contato.replace(/\D/g, '')}" target="_blank" class="hover:underline"><i class="fa-brands fa-whatsapp mr-1"></i>${r.contato || '-'}</a></td>
+                            <td class="p-3 text-amber-400"><a href="https://wa.me/55${(r.contato || '').replace(/\D/g, '')}" target="_blank" class="hover:underline"><i class="fa-brands fa-whatsapp mr-1"></i>${r.contato || '-'}</a></td>
                             <td class="p-3 text-xs">${r.checkin} até ${r.checkout}</td>
                             <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${isPendente ? 'bg-amber-500/20 text-amber-400 animate-pulse' : 'bg-emerald-500/20 text-emerald-400'}">${r.status === 'Pendente' ? 'Aguardando Confirmação' : 'Confirmada'}</span></td>
                             <td class="p-3 flex gap-2">
@@ -359,6 +407,36 @@
                             </td>
                         `;
                         tbodyRes.appendChild(tr);
+                    });
+                }
+            });
+
+            // ESCUTA EVENTOS CORPORATIVOS (AUDITÓRIO)
+            onValue(ref(db, 'reservas_auditorio'), (snapshot) => {
+                const eventos = snapshot.exists() ? snapshot.val() : {};
+                const arrEv = Object.entries(eventos);
+                const tbodyEv = document.getElementById('tabela-adm-eventos');
+                tbodyEv.innerHTML = '';
+
+                if(arrEv.length === 0) {
+                    tbodyEv.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-stone-500">Nenhum evento corporativo agendado no auditório.</td></tr>`;
+                } else {
+                    arrEv.forEach(([evKey, ev]) => {
+                        const isPendente = ev.status === 'Pendente';
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="p-3 font-bold text-amber-400 text-xs">${ev.tipoEvento || 'Evento Corporativo'}</td>
+                            <td class="p-3 font-semibold text-white">${ev.nome}</td>
+                            <td class="p-3 text-amber-400"><a href="https://wa.me/55${(ev.contato || '').replace(/\D/g, '')}" target="_blank" class="hover:underline"><i class="fa-brands fa-whatsapp mr-1"></i>${ev.contato || '-'}</a></td>
+                            <td class="p-3 text-xs font-bold text-white">${ev.data} <span class="text-amber-400">(${ev.horaInicio} - ${ev.horaFim})</span></td>
+                            <td class="p-3 text-xs text-stone-300">${ev.obs || '-'}</td>
+                            <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${isPendente ? 'bg-amber-500/20 text-amber-400 animate-pulse' : 'bg-emerald-500/20 text-emerald-400'}">${isPendente ? 'Pendente' : 'Confirmada'}</span></td>
+                            <td class="p-3 flex gap-2">
+                                ${isPendente ? `<button onclick="confirmarEvento('${evKey}', '${ev.contato}', '${ev.nome}', '${ev.data}', '${ev.horaInicio}', '${ev.horaFim}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1"><i class="fa-solid fa-check"></i> Aprovar & WhatsApp</button>` : ''}
+                                <button onclick="excluirEvento('${evKey}')" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1"><i class="fa-solid fa-xmark"></i> ${isPendente ? 'Recusar' : 'Cancelar'}</button>
+                            </td>
+                        `;
+                        tbodyEv.appendChild(tr);
                     });
                 }
             });
@@ -483,9 +561,10 @@
 
             const titulo = document.getElementById('promo-std-titulo').value;
             const valor = parseFloat(document.getElementById('promo-std-valor').value);
+            const minDias = parseInt(document.getElementById('promo-std-mindias').value) || 1;
 
             try {
-                await set(ref(db, 'configuracoes/promo_standard'), { titulo, valor, ativa: true });
+                await set(ref(db, 'configuracoes/promo_standard'), { titulo, valor, minDias, ativa: true });
                 alert("Promoção para Apartamentos Standard publicada com sucesso!");
             } catch(err) { alert("Erro ao publicar: " + err.message); }
         };
@@ -496,9 +575,10 @@
 
             const titulo = document.getElementById('promo-suite-titulo').value;
             const valor = parseFloat(document.getElementById('promo-suite-valor').value);
+            const minDias = parseInt(document.getElementById('promo-suite-mindias').value) || 1;
 
             try {
-                await set(ref(db, 'configuracoes/promo_suite'), { titulo, valor, ativa: true });
+                await set(ref(db, 'configuracoes/promo_suite'), { titulo, valor, minDias, ativa: true });
                 alert("Promoção para Suítes com Lareira publicada com sucesso!");
             } catch(err) { alert("Erro ao publicar: " + err.message); }
         };
@@ -514,6 +594,60 @@
                     window.open(`https://wa.me/${numLimpo}?text=${msgConfirmacao}`, '_blank');
                 } catch(err) { alert("Erro ao confirmar reserva."); }
             }
+        };
+
+        // EVENTOS CORPORATIVOS ADMIN
+        window.confirmarEvento = async function(evKey, telCliente, nomeCliente, data, horaInicio, horaFim) {
+            if(confirm(`Deseja aprovar o evento de ${nomeCliente} no auditório em ${data} (${horaInicio} - ${horaFim})?`)) {
+                try {
+                    await update(ref(db, `reservas_auditorio/${evKey}`), { status: 'Confirmada' });
+                    let numLimpo = telCliente.replace(/\D/g, '');
+                    if(!numLimpo.startsWith('55')) numLimpo = '55' + numLimpo;
+
+                    const msgConfirmacao = `Olá ${nomeCliente}! O agendamento do *Auditório Corporativo* no *Hotel dos Sonhos Fazenda* foi confirmado!%0A%0A*Data:* ${data}%0A*Horário:* ${horaInicio} às ${horaFim}%0A%0AAguardamos vocês!`;
+                    window.open(`https://wa.me/${numLimpo}?text=${msgConfirmacao}`, '_blank');
+                } catch(err) { alert("Erro ao confirmar evento."); }
+            }
+        };
+
+        window.excluirEvento = async function(evKey) {
+            const senhaDigitada = prompt("🔒 Validação Gerencial\n\nDigite a senha do gerente (Saadmin) para confirmar o cancelamento deste evento:");
+            if(senhaDigitada !== 'Saadmin') { alert("❌ Senha incorreta! Cancelamento bloqueado."); return; }
+
+            try {
+                await remove(ref(db, `reservas_auditorio/${evKey}`));
+                alert("Evento cancelado com sucesso.");
+            } catch(err) { alert("Erro ao cancelar evento: " + err.message); }
+        };
+
+        window.abrirModalEventoManual = () => document.getElementById('modal-evento-manual').classList.remove('hidden');
+        window.fecharModalEventoManual = () => document.getElementById('modal-evento-manual').classList.add('hidden');
+
+        window.criarEventoManualAdmin = async function(e) {
+            e.preventDefault();
+            const nome = document.getElementById('mev-nome').value;
+            const tel = document.getElementById('mev-tel').value;
+            const tipoEvento = document.getElementById('mev-tipo').value;
+            const data = document.getElementById('mev-data').value;
+            const horaInicio = document.getElementById('mev-inicio').value;
+            const horaFim = document.getElementById('mev-fim').value;
+
+            try {
+                const novaChave = Date.now();
+                await set(child(ref(db, 'reservas_auditorio'), novaChave), {
+                    espaco: 'Auditório Corporativo',
+                    tipoEvento,
+                    nome,
+                    contato: tel,
+                    data,
+                    horaInicio,
+                    horaFim,
+                    obs: 'Agendamento Manual Admin',
+                    status: 'Confirmada'
+                });
+                fecharModalEventoManual();
+                alert("Evento manual cadastrado com sucesso!");
+            } catch(err) { alert("Erro ao criar evento manual."); }
         };
 
         // EXIGE SENHA SAADMIN PARA DAR BAIXA NA PARCELA
