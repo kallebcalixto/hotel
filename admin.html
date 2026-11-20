@@ -52,7 +52,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Total de Sócios</span><span id="adm-total-socios" class="text-3xl font-extrabold text-white mt-1 block">0</span></div>
             <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Faturamento Est. (Mensalidade)</span><span id="adm-faturamento" class="text-3xl font-extrabold text-amber-500 mt-1 block">R$ 0,00</span></div>
-            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Quartos Confirmados</span><span id="adm-quartos-ocupados" class="text-3xl font-extrabold text-white mt-1 block">0 / 76</span></div>
+            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Quartos Confirmados</span><span id="adm-quartos-ocupados" class="text-3xl font-extrabold text-white mt-1 block">0 / 75</span></div>
             <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl shadow-md"><span class="text-xs text-stone-400 block uppercase font-semibold">Taxa de Ocupação</span><span id="adm-taxa-ocupacao" class="text-3xl font-extrabold text-emerald-400 mt-1 block">0%</span></div>
         </div>
 
@@ -383,8 +383,8 @@
                 const arrRes = Object.entries(reservas);
                 const ocupados = arrRes.filter(([k, r]) => r.status === 'Confirmada').length;
                 
-                document.getElementById('adm-quartos-ocupados').innerText = `${ocupados} / 76`;
-                document.getElementById('adm-taxa-ocupacao').innerText = `${((ocupados / 76) * 100).toFixed(1)}%`;
+                document.getElementById('adm-quartos-ocupados').innerText = `${ocupados} / 75`;
+                document.getElementById('adm-taxa-ocupacao').innerText = `${((ocupados / 75) * 100).toFixed(1)}%`;
 
                 const tbodyRes = document.getElementById('tabela-adm-reservas');
                 tbodyRes.innerHTML = '';
@@ -443,9 +443,9 @@
 
             const selectUnidade = document.getElementById('man-unidade');
             selectUnidade.innerHTML = '';
-            for(let i = 1; i <= 76; i++) {
-                const isSuite = i <= 6;
-                const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-6}`;
+            for(let i = 1; i <= 75; i++) {
+                const isSuite = i <= 5;
+                const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-5}`;
                 selectUnidade.appendChild(new Option(nomeUnidade, nomeUnidade));
             }
         }
