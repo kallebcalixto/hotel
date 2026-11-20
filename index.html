@@ -112,7 +112,7 @@
                 <div class="max-w-2xl space-y-6">
                     <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-full border border-amber-500/20 uppercase tracking-widest">Nova Direção</span>
                     <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight text-white">Viva momentos inesquecíveis na fazenda dos seus sonhos.</h2>
-                    <p class="text-stone-300 text-base leading-relaxed">Mais de 70 apartamentos climatizados e 6 suítes exclusivas com lareira. Torne-se sócio ou aproveite nossas promoções exclusivas!</p>
+                    <p class="text-stone-300 text-base leading-relaxed">70 apartamentos climatizados e 5 suítes exclusivas com lareira. Torne-se sócio ou aproveite nossas promoções exclusivas!</p>
                     <div class="flex flex-wrap gap-4 pt-2">
                         <button onclick="switchTab('cadastro')" class="bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-6 py-3 rounded-xl shadow-lg transition">Quero me Associar</button>
                         <button onclick="switchTab('avulso')" class="bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold px-6 py-3 rounded-xl border border-stone-700 transition">Ver Calendário & Reservar</button>
@@ -223,7 +223,7 @@
             </div>
 
             <div class="space-y-4">
-                <div class="flex justify-between items-center"><h4 class="font-bold text-white text-lg">Unidades (6 Suítes c/ Lareira + 70 Apts)</h4></div>
+                <div class="flex justify-between items-center"><h4 class="font-bold text-white text-lg">Unidades (5 Suítes c/ Lareira + 70 Apts)</h4></div>
                 <div id="grid-apartamentos" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3"></div>
             </div>
         </section>
@@ -726,9 +726,9 @@
                 const select = document.getElementById('res-unidade');
                 select.innerHTML = '';
 
-                for(let i = 1; i <= 76; i++) {
-                    const isSuite = i <= 6;
-                    const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-6}`;
+                for(let i = 1; i <= 75; i++) {
+                    const isSuite = i <= 5;
+                    const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-5}`;
                     const opt = document.createElement('option');
                     opt.value = nomeUnidade;
                     opt.textContent = nomeUnidade;
@@ -760,9 +760,9 @@
                     mesFiltro.value = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
                 }
 
-                for(let i = 1; i <= 76; i++) {
-                    const isSuite = i <= 6;
-                    const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-6}`;
+                for(let i = 1; i <= 75; i++) {
+                    const isSuite = i <= 5;
+                    const nomeUnidade = isSuite ? `Suíte ${i} (Lareira)` : `Apt ${i-5}`;
                     selectFiltro.appendChild(new Option(nomeUnidade, nomeUnidade));
                     selectForm.appendChild(new Option(nomeUnidade, nomeUnidade));
                 }
