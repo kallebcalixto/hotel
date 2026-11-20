@@ -168,7 +168,7 @@
                     <div class="bg-stone-900 border border-stone-800 p-4 rounded-xl space-y-3">
                         <h4 class="font-bold text-xs uppercase text-amber-400 tracking-wider"><i class="fa-solid fa-file-shield mr-1"></i> Contrato de Adesão ao Clube de Férias & Termos de Uso</h4>
                         <div class="text-[11px] text-stone-300 max-h-36 overflow-y-auto pr-2 space-y-2 border border-stone-800 p-3 rounded-lg bg-stone-950 leading-relaxed">
-                            <p><strong>CLÁUSULA 1ª - DO OBJETO E VIGÊNCIA:</strong> O presente instrumento tiene por objeto a adesão ao programa de tempo compartilhado (Clube de Férias) do <em>Hotel dos Sonhos Fazenda</em>, com vigência obrigatória de <strong>12 (doze) meses</strong> contados a partir da data de aprovação deste cadastro.</p>
+                            <p><strong>CLÁUSULA 1ª - DO OBJETO E VIGÊNCIA:</strong> O presente instrumento tem por objeto a adesão ao programa de tempo compartilhado (Clube de Férias) do <em>Hotel dos Sonhos Fazenda</em>, com vigência obrigatória de <strong>12 (doze) meses</strong> contados a partir da data de aprovação deste cadastro.</p>
                             <p><strong>CLÁUSULA 2ª - DA RENOVAÇÃO AUTOMÁTICA:</strong> Visando assegurar a continuidade ininterrupta dos benefícios de hospedagem e tarifas preferenciais, este contrato renovar-se-á <strong>automaticamente por igual período (sucessivos ciclos de 12 meses)</strong>. Caso o associado não deseje a renovação, deverá notificar a administração por escrito com antecedência mínima de 30 (trinta) dias do término do ciclo vigente.</p>
                             <p><strong>CLÁUSULA 3ª - DOS DIREITOS DE USO E CARÊNCIA:</strong> O associado adquire o direito de usufruir da quantidade de dias mensais estipulada no plano escolhido. O uso das dependências é condicionado à adimplência financeira, sendo obrigatório o cumprimento da carência de 3 (três) mensalidades quitadas para a emissão de reservas.</p>
                             <p><strong>CLÁUSULA 4ª - DA PROTEÇÃO E TRANSPARÊNCIA (CDC):</strong> As partes declaram estar cientes de que os direitos e obrigações aqui pactuados garantem o equilíbrio contratual, a segurança patrimonial da empresa administradora e o pleno gozo de lazer ao associado, em conformidade com as normas de proteção ao consumidor.</p>
@@ -295,12 +295,12 @@
                     <p class="text-stone-400 text-sm mt-1">Alugue nosso auditório para convenções, treinamentos, workshops e reuniões empresariais com toda a infraestrutura da fazenda.</p>
                 </div>
 
-                <!-- GALERIA DE FOTOS DO AUDITÓRIO -->
+                <!-- GALERIA DE FOTOS DO AUDITÓRIO (CLIQUE PARA AMPLIAR) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <img src="https://i.imgur.com/7kKYTYY.jpeg" alt="Auditório Eventos Corporativos 1" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-pointer">
-                    <img src="https://i.imgur.com/UQEWLyd.jpeg" alt="Auditório Eventos Corporativos 2" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-pointer">
-                    <img src="https://i.imgur.com/PxjzIwE.jpeg" alt="Auditório Eventos Corporativos 3" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-pointer">
-                    <img src="https://i.imgur.com/TQzVrZT.jpeg" alt="Auditório Eventos Corporativos 4" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-pointer">
+                    <img src="https://i.imgur.com/7kKYTYY.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Auditório Eventos Corporativos 1" title="Clique para ampliar" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-zoom-in">
+                    <img src="https://i.imgur.com/UQEWLyd.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Auditório Eventos Corporativos 2" title="Clique para ampliar" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-zoom-in">
+                    <img src="https://i.imgur.com/PxjzIwE.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Auditório Eventos Corporativos 3" title="Clique para ampliar" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-zoom-in">
+                    <img src="https://i.imgur.com/TQzVrZT.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Auditório Eventos Corporativos 4" title="Clique para ampliar" class="h-44 w-full object-cover rounded-xl border border-stone-800 shadow-lg hover:scale-[1.02] hover:border-amber-500 transition cursor-zoom-in">
                 </div>
 
                 <!-- AGENDA / CALENDÁRIO DE DISPONIBILIDADE DO AUDITÓRIO -->
@@ -382,41 +382,50 @@
 
     </main>
 
-    <!-- CARROSSEL DE FOTOS COM EFEITO DE ZOOM E DESTAQUE AO PASSAR O MOUSE -->
+    <!-- CARROSSEL DE FOTOS COM EFEITO DE ZOOM E DESTAQUE AO PASSAR O MOUSE + CLIQUE PARA TELA CHEIA -->
     <div class="w-full bg-stone-950 border-t border-stone-800 py-6 overflow-hidden relative z-10 mt-12 shadow-2xl">
         <div class="text-center mb-4">
-            <span class="text-xs text-amber-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-camera mr-1"></i> Conheça Nosso Espaço (Passe o mouse para destacar)</span>
+            <span class="text-xs text-amber-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-camera mr-1"></i> Conheça Nosso Espaço (Clique na foto para ampliar)</span>
         </div>
         <div class="overflow-hidden whitespace-nowrap relative w-full">
             <div class="animate-slider flex gap-5 px-4">
                 <!-- BLOCO 1 DE FOTOS -->
                 <div class="flex gap-5 shrink-0 items-center">
-                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/a2c5b278-9852-4e90-b869-6287a94d690d" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
-                    <img src="https://i.imgur.com/006ba1d8-7a22-4a62-a0bd-e2611f61c5dc" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
-                    <img src="https://i.imgur.com/67785f7f-37cf-4520-9bd1-c26e9be79fd2" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/kBz0ek6.jpeg'">
-                    <img src="https://i.imgur.com/0fb4bafe-208c-403f-b1ef-be3cf207a738" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/MJIsJMe.jpeg'">
-                    <img src="https://i.imgur.com/3c56436e-6694-4787-bfde-9908c62b8e78" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
-                    <img src="https://i.imgur.com/089fa65f-7c2d-43fd-ab14-847339c49879" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
+                    <img src="https://i.imgur.com/vbeeDw2.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/NbdmBTU.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/kBz0ek6.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/MJIsJMe.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/a2c5b278-9852-4e90-b869-6287a94d690d" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/006ba1d8-7a22-4a62-a0bd-e2611f61c5dc" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
+                    <img src="https://i.imgur.com/67785f7f-37cf-4520-9bd1-c26e9be79fd2" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/kBz0ek6.jpeg'">
+                    <img src="https://i.imgur.com/0fb4bafe-208c-403f-b1ef-be3cf207a738" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/MJIsJMe.jpeg'">
+                    <img src="https://i.imgur.com/3c56436e-6694-4787-bfde-9908c62b8e78" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/089fa65f-7c2d-43fd-ab14-847339c49879" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
                 </div>
                 <!-- BLOCO 2 DUPLICADO (PARA GARANTIR O LOOP INFINITO SUAVE) -->
                 <div class="flex gap-5 shrink-0 items-center">
-                    <img src="https://i.imgur.com/vbeeDw2.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/NbdmBTU.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/kBz0ek6.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/MJIsJMe.jpeg" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer">
-                    <img src="https://i.imgur.com/a2c5b278-9852-4e90-b869-6287a94d690d" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
-                    <img src="https://i.imgur.com/006ba1d8-7a22-4a62-a0bd-e2611f61c5dc" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
-                    <img src="https://i.imgur.com/67785f7f-37cf-4520-9bd1-c26e9be79fd2" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/kBz0ek6.jpeg'">
-                    <img src="https://i.imgur.com/0fb4bafe-208c-403f-b1ef-be3cf207a738" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/MJIsJMe.jpeg'">
-                    <img src="https://i.imgur.com/3c56436e-6694-4787-bfde-9908c62b8e78" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
-                    <img src="https://i.imgur.com/089fa65f-7c2d-43fd-ab14-847339c49879" alt="Hotel Foto" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-pointer" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
+                    <img src="https://i.imgur.com/vbeeDw2.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/NbdmBTU.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/kBz0ek6.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/MJIsJMe.jpeg" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in">
+                    <img src="https://i.imgur.com/a2c5b278-9852-4e90-b869-6287a94d690d" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/006ba1d8-7a22-4a62-a0bd-e2611f61c5dc" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
+                    <img src="https://i.imgur.com/67785f7f-37cf-4520-9bd1-c26e9be79fd2" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/kBz0ek6.jpeg'">
+                    <img src="https://i.imgur.com/0fb4bafe-208c-403f-b1ef-be3cf207a738" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/MJIsJMe.jpeg'">
+                    <img src="https://i.imgur.com/3c56436e-6694-4787-bfde-9908c62b8e78" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/vbeeDw2.jpeg'">
+                    <img src="https://i.imgur.com/089fa65f-7c2d-43fd-ab14-847339c49879" onclick="abrirFotoTelaCheia(this.src, this.alt)" alt="Hotel Foto" title="Clique para ampliar" class="h-36 w-60 object-cover rounded-2xl border-2 border-stone-800 shadow-xl transition-all duration-300 hover:scale-110 hover:border-amber-500 hover:z-30 cursor-zoom-in" onerror="this.src='https://i.imgur.com/NbdmBTU.jpeg'">
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- LIGHTBOX / VISUALIZADOR DE FOTO EM TELA CHEIA (CLIQUE NA FOTO PARA VOLTAR) -->
+    <div id="lightbox-foto" onclick="fecharFotoTelaCheia()" class="fixed inset-0 bg-black/95 backdrop-blur-md z-[100] hidden flex flex-col items-center justify-center p-4 cursor-zoom-out select-none">
+        <span class="text-xs text-stone-300 uppercase tracking-widest mb-3 bg-stone-900/90 border border-stone-700 px-4 py-1.5 rounded-full">
+            <i class="fa-solid fa-magnifying-glass-minus mr-1 text-amber-400"></i> Clique na foto ou fora dela para voltar
+        </span>
+        <img id="lightbox-img" src="" onclick="fecharFotoTelaCheia()" alt="Foto ampliada" class="max-w-full max-h-[82vh] object-contain rounded-2xl border-2 border-amber-500/40 shadow-2xl transition-transform duration-200 cursor-zoom-out">
+        <p id="lightbox-legenda" class="text-xs text-stone-400 mt-3"></p>
     </div>
 
     <!-- MODAL SÓCIO -->
@@ -457,6 +466,27 @@
         let WHATSAPP_AVULSO = "5541996278447";
         let WHATSAPP_SOCIO = "5541996278447";
         let cachePlanos = { padrao: { valor: 199.90, limiteDias: 5 }, vip: { valor: 299.90, limiteDias: 10 } };
+
+        // AMPLIAR E FECHAR FOTO EM TELA CHEIA
+        window.abrirFotoTelaCheia = function(src, alt) {
+            if (!src) return;
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-legenda').innerText = alt || '';
+            document.getElementById('lightbox-foto').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.fecharFotoTelaCheia = function() {
+            document.getElementById('lightbox-foto').classList.add('hidden');
+            document.getElementById('lightbox-img').src = '';
+            document.body.style.overflow = '';
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !document.getElementById('lightbox-foto').classList.contains('hidden')) {
+                fecharFotoTelaCheia();
+            }
+        });
 
         // FUNÇÃO OFICIAL PARA VALIDAR CPF (IMPEDE NÚMEROS DE MENTIRA OU REPETIDOS)
         function validarCPF(cpf) {
